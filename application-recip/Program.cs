@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddLocalization();
 
 // Radzen
 builder.Services.AddRadzenComponents();
@@ -20,8 +21,6 @@ builder.Services.AddFluxor(config =>
       .ScanAssemblies(typeof(Program).Assembly)
       .UseReduxDevTools();
 });
-
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 
 var app = builder.Build();
@@ -41,5 +40,13 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.UseRequestLocalization(options =>
+{
+    var supportedCultures = new[] { "fr-FR", "en-US" };
+    options.SetDefaultCulture(supportedCultures[0])
+        .AddSupportedCultures(supportedCultures)
+        .AddSupportedUICultures(supportedCultures);
+});
 
 app.Run();

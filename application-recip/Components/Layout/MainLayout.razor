@@ -1,9 +1,43 @@
 ﻿@inherits LayoutComponentBase
 
-@Body
+<RadzenLayout style="position: relative;grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
+    <RadzenHeader>
+        <RadzenStack Orientation="Orientation.Horizontal" 
+                     AlignItems="AlignItems.Center" 
+                     Gap="0">
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+            <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)" />
+        </RadzenStack>
+    </RadzenHeader>
+
+    <RadzenSidebar Responsive="false" @bind-Expanded="@SidebarExpanded" style="position: absolute; z-index: 3">
+        <RadzenStack Orientation="Orientation.Horizontal" 
+                     class="rz-p-2"
+                     AlignItems="AlignItems.End"
+                     JustifyContent="JustifyContent.End">
+            <RadzenText Text="@_applicationVersion" TextStyle="TextStyle.Subtitle1"
+                        Style="color: var(--rz-secondary);margin:0;" />
+
+            <RadzenButton Icon="west" 
+                          Variant="Variant.Text" 
+                          ButtonStyle="ButtonStyle.Secondary" 
+                          Click="@(() => SidebarExpanded = false)" />
+        </RadzenStack>
+
+        <RadzenPanelMenu>
+            <RadzenPanelMenuItem Text="Home" 
+                                 Icon="home" />
+        </RadzenPanelMenu>
+    </RadzenSidebar>
+    
+    <RadzenBody>
+        <div class="rz-p-4">
+            @Body
+        </div>
+    </RadzenBody>
+
+    @if (SidebarExpanded)
+    {
+        <div @onclick="@(() => SidebarExpanded = false)" class="rz-dialog-mask" style="position: absolute; z-index: 2"></div>
+    }
+</RadzenLayout>
