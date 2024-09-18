@@ -9,9 +9,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Connected Services\ms-configuration\ms-configurationCsdl.xml" />
+    <None Remove="Connected Services\ms-recip\ms-recipCsdl.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Connected Services\ms-configuration\ms-configurationCsdl.xml" />
+    <EmbeddedResource Include="Connected Services\ms-recip\ms-recipCsdl.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fluxor.Blazor.Web" Version="6.1.0" />
     <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="6.1.0" />
+    <PackageReference Include="Microsoft.OData.Client" Version="8.0.1" />
+    <PackageReference Include="Microsoft.OData.Core" Version="8.0.1" />
+    <PackageReference Include="Microsoft.OData.Edm" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Spatial" Version="8.0.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="Radzen.Blazor" Version="5.2.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
 
 </Project>

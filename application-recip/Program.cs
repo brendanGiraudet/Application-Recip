@@ -1,4 +1,5 @@
 using application_recip.Components;
+using application_recip.Extensions;
 using Fluxor;
 using Fluxor.Blazor.Web.ReduxDevTools;
 using Radzen;
@@ -10,6 +11,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddLocalization();
+builder.Services.AddHttpClient();
+
+
+builder.Services.AddConfigurations(builder.Configuration);
+builder.Services.AddServices();
 
 // Radzen
 builder.Services.AddRadzenComponents();

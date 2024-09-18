@@ -1,0 +1,75 @@
+﻿@page "/recips/add"
+@using ms_recip.Ms_recip.Models
+
+<h3>RecipForm</h3>
+
+
+<RadzenTemplateForm Data="@_actualRecip" Submit="@((RecipModel args) => { Submit(args); })">
+    <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack>
+
+                @* RecipName *@
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="RecipName" 
+                                     Component="RecipName" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox @bind-Value="@_actualRecip.Name" 
+                                       Placeholder="Select something" 
+                                       Name="RecipName"/>
+                    </RadzenColumn>
+                </RadzenRow>
+                
+                @* RecipImage *@
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="RecipImage"
+                                     Component="RecipImage" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenTextBox @bind-Value="@_actualRecip.Image" 
+                                       Placeholder="Select something" 
+                                       Name="RecipImage" />
+                    </RadzenColumn>
+                </RadzenRow>
+                
+                @* RecipPersonNumber *@
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="RecipPersonNumber"
+                                     Component="RecipPersonNumber" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenNumeric @bind-Value="@_actualRecip.PersonNumber" 
+                                       Placeholder="Select something" 
+                                       Name="RecipPersonNumber" />
+                    </RadzenColumn>
+                </RadzenRow>
+                
+                @* RecipCookingDuration *@
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="RecipCookingDuration"
+                                     Component="RecipCookingDuration" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenDatePicker @bind-Value="@_actualRecip.CookingDuration" 
+                                       Placeholder="Select something" 
+                                       Name="RecipCookingDuration" />
+                    </RadzenColumn>
+                </RadzenRow>
+
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="Save" />
+        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Icon="cancel" Text="Cancel" Click="@Cancel" />
+    </RadzenStack>
+</RadzenTemplateForm>

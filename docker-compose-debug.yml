@@ -19,6 +19,8 @@ services:
 
       MSConfigurationSettings__OdataBaseUrl: "https://ms-configuration-local.brendan-giraudet.com/odata"
       
+      MSRecipSettings__OdataBaseUrl: "https://ms-recip-local.brendan-giraudet.com/odata"
+      
       RabbitMqQueueName: "application-recip"
       
     restart: always
