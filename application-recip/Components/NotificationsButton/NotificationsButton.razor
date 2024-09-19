@@ -1,7 +1,8 @@
 ﻿@using application_recip.Constants
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-<RadzenButton ButtonStyle="ButtonStyle.Secondary">
+<RadzenButton ButtonStyle="ButtonStyle.Secondary"
+              Click="OnClick">
     <RadzenIcon Icon="@MaterialIconConstants.Notification" />
 
     <RadzenBadge Variant="Variant.Outlined"

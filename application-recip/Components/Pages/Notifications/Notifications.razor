@@ -1,0 +1,21 @@
+﻿@page "/notifications"
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>Notifications</h3>
+
+@if (NotificationsState.Value.Notifications.Count() > 0)
+{
+    <RadzenStack Gap="0" class="rz-py-8 rz-px-12">
+        @foreach (var notification in NotificationsState.Value.Notifications)
+        {
+            <RadzenAlert Close=@OnClose>
+                @notification.Content
+            </RadzenAlert>
+        }
+    </RadzenStack>
+}
+else
+{
+    <RadzenText Text="Pas de notification" />
+}
