@@ -44,6 +44,7 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
             messageType = MessageTypeEnum.Success;
         }
 
+        dispatcher.Dispatch(new CreateItemResultAction<T>(createdItem, itemCreationResult.IsSuccess));
         dispatcher.Dispatch(new SetMessageAction(itemCreationResult.Message ?? string.Empty, messageType));
     }
 
