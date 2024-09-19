@@ -10,13 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddLocalization();
-builder.Services.AddHttpClient();
-
-
-builder.Services.AddConfigurations(builder.Configuration);
-builder.Services.AddServices();
-
 // Radzen
 builder.Services.AddRadzenComponents();
 
@@ -27,6 +20,13 @@ builder.Services.AddFluxor(config =>
       .ScanAssemblies(typeof(Program).Assembly)
       .UseReduxDevTools();
 });
+
+builder.Services.AddLocalization();
+builder.Services.AddHttpClient();
+
+
+builder.Services.AddConfigurations(builder.Configuration);
+builder.Services.AddServices();
 
 
 var app = builder.Build();

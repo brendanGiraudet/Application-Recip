@@ -25,6 +25,7 @@ public class BaseService<T> : IBaseService<T> where T : class
 
     protected IRabbitMqProducerService _rabbitMqProducerService;
     protected IUserInfoService _userInfoService;
+    protected MSRecipSettings _mSRecipSettings;
 
     public BaseService(
         string entitySetName,
@@ -40,7 +41,9 @@ public class BaseService<T> : IBaseService<T> where T : class
 
         _propertyKeyName = propertyKeyName;
 
-        _odataContainer = new Container(new(msRecipSettingsOptions.Value.OdataBaseUrl));
+        _mSRecipSettings = msRecipSettingsOptions.Value;
+
+        _odataContainer = new Container(new(_mSRecipSettings.OdataBaseUrl));
 
         _odataContainer.BuildingRequest += (sender, eventArgs) =>
         {
@@ -66,7 +69,7 @@ public class BaseService<T> : IBaseService<T> where T : class
     {
         try
         {
-            var url = $"{_httpClient.BaseAddress?.AbsoluteUri}/{_entitySetName}";
+            var url = $"{_mSRecipSettings.OdataBaseUrl}/{_entitySetName}";
             var uri = new Uri(url);
             uri = uri.GetODataUri(filter: args.Filter, top: args.Top, skip: args.Skip, orderby: args.OrderBy, expand: expand, select: select, count: count);
 

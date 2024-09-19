@@ -15,7 +15,10 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     {
         var filteredItemsResult = await _baseService.GetDatagridItemsAsync(args: getItemsWithFilterAction.LoadDataArgs, expand: getItemsWithFilterAction.Expand, select: getItemsWithFilterAction.Select, count: getItemsWithFilterAction.Count);
 
-        dispatcher.Dispatch(new GetDatagridItemsResultAction<T>(filteredItemsResult.Value.AsODataEnumerable(), filteredItemsResult.Count, getItemsWithFilterAction.LoadDataArgs.Top!.Value));
+        var items = filteredItemsResult.Value.AsODataEnumerable();
+        var top = getItemsWithFilterAction.LoadDataArgs.Top ?? 10;
+
+        dispatcher.Dispatch(new GetDatagridItemsResultAction<T>(items, filteredItemsResult.Count, top));
     }
 
     [EffectMethod]

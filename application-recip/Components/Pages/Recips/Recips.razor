@@ -1,0 +1,35 @@
+﻿@page "/recips"
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>Recips</h3>
+
+@if (RecipsState.Value.DatagridItems.Count() > 0)
+{
+     <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+    @foreach (var recip in RecipsState.Value.DatagridItems)
+    {
+        <RadzenCard class="rz-my-12 rz-mx-auto"
+                    Style="max-width: 420px">
+            <RadzenStack Orientation="Orientation.Horizontal"
+                         JustifyContent="JustifyContent.Center"
+                         Gap="1rem"
+                         class="rz-p-4">
+                <RadzenImage Path="@recip.Image"
+                             Style="width: 15rem; height: 15rem; border-radius: 50%;" />
+            </RadzenStack>
+
+            <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+                <RadzenText TextStyle="TextStyle.H6"
+                            class="rz-color-on-primary-light">
+                    <strong>@recip.Name</strong>
+                </RadzenText>
+            </RadzenCard>
+        </RadzenCard>
+    }
+     </RadzenRow>
+}
+else
+{
+    <RadzenText Text="Pas de recette" />
+}

@@ -4,11 +4,11 @@ namespace application_recip.Store.BaseStore;
 
 public class BaseState<T>
 {
-    public ODataEnumerable<T>? DatagridItems { get; set; }
+    public ODataEnumerable<T>? DatagridItems { get; }
 
     public int? TotalItems { get; }
 
-    public T? ExpectedItem { get; set; }
+    public T? ExpectedItem { get; }
 
     private BaseState() 
     {
