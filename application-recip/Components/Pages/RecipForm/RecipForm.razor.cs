@@ -37,6 +37,6 @@ public partial class RecipForm
 
     void Cancel()
     {
-        NavigationManager.NavigateTo(PageUrlsConstants.HomePath);
+        NavigationManager.NavigateTo(PageUrlsConstants.RecipsPath);
     }
 }
