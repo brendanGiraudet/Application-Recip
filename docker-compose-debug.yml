@@ -21,6 +21,8 @@ services:
       
       MSRecipSettings__OdataBaseUrl: "https://ms-recip-local.brendan-giraudet.com/odata"
       
+      MSNotificationSettings__OdataBaseUrl: "https://ms-notification-local.brendan-giraudet.com/odata"
+      
       RabbitMqQueueName: "application-recip"
       
     restart: always

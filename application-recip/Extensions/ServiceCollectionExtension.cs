@@ -1,4 +1,5 @@
 ﻿using application_recip.Services.ConfigurationService;
+using application_recip.Services.NotificationsService;
 using application_recip.Services.RabbitMqProducerService;
 using application_recip.Services.RecipsService;
 using application_recip.Services.UserInfoService;
@@ -13,6 +14,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<IConfigurationService, ConfigurationService>();
         services.AddTransient<IRabbitMqProducerService, RabbitMqProducerService>();
         services.AddTransient<IRecipsService, RecipsService>();
+        services.AddTransient<INotificationsService, NotificationsService>();
         
         services.AddSingleton<IUserInfoService, UserInfoService>();
     }
@@ -22,5 +24,7 @@ public static class ServiceCollectionExtension
         services.Configure<MSConfigurationSettings>(options => configuration.GetSection(key: "MSConfigurationSettings").Bind(options));
         
         services.Configure<MSRecipSettings>(options => configuration.GetSection(key: "MSRecipSettings").Bind(options));
+        
+        services.Configure<MSNotificationSettings>(options => configuration.GetSection(key: "MSNotificationSettings").Bind(options));
     }
 }
