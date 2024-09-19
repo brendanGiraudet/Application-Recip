@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
-    <RadzenTheme Theme="material" @rendermode="InteractiveServer" />
+    <RadzenTheme Theme="material" @rendermode="@RenderMode.InteractiveServer" />
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="application_recip.styles.css" />
     <HeadOutlet />
@@ -13,9 +13,9 @@
 
 <body>
     ﻿
-    <Fluxor.Blazor.Web.StoreInitializer />
+    <Fluxor.Blazor.Web.StoreInitializer @rendermode="@RenderMode.InteractiveServer" />
 
-    <RadzenComponents @rendermode="InteractiveServer" />
+    <RadzenComponents @rendermode="@RenderMode.InteractiveServer" />
 
     <Routes @rendermode="@RenderMode.InteractiveServer" />
 

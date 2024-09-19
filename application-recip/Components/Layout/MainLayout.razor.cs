@@ -4,9 +4,9 @@ namespace application_recip.Components.Layout;
 
 public partial class MainLayout
 {
-    [Inject] public IConfiguration Configuration { get; set; }
+    [Inject] public required IConfiguration Configuration { get; set; }
 
-    private string _applicationVersion => Configuration["ApplicationVersion"];
+    private string? ApplicationVersion => Configuration["ApplicationVersion"];
 
     public bool SidebarExpanded { get; set; } = false;
 }

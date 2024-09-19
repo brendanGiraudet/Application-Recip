@@ -1,0 +1,9 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@{
+    if (!string.IsNullOrEmpty(MessageState.Value.Message))
+    {
+        ShowNotification();
+        CleanMessage();
+    }
+}

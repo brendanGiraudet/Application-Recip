@@ -1,5 +1,6 @@
-﻿using application_recip.Stores.BaseStore.Actions;
-using application_recip.Stores.RecipsStore;
+﻿using application_recip.Services.UserInfoService;
+using application_recip.Store.BaseStore.Actions;
+using application_recip.Store.RecipsStore;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
 using ms_recip.Ms_recip.Models;
@@ -13,8 +14,20 @@ public partial class RecipForm
     [Inject] public required IDispatcher Dispatcher { get; set; }
 
     [Inject] public required NavigationManager NavigationManager { get; set; }
+    
+    [Inject] public required IUserInfoService UserInfoService { get; set; }
 
-    RecipModel _actualRecip = new RecipModel();
+    private readonly RecipModel _actualRecip = new();
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        _actualRecip.Id = Guid.NewGuid();
+        
+        _actualRecip.Authorname = UserInfoService.GetUserName();
+        _actualRecip.AuthorId = UserInfoService.GetUserId();
+    }
 
     void Submit(RecipModel model)
     {

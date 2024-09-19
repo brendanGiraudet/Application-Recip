@@ -8,15 +8,12 @@ namespace application_recip.Services.ConfigurationService;
 
 public class ConfigurationService : IConfigurationService
 {
-    private readonly HttpClient _httpClient;
     private readonly MSConfigurationSettings _msConfigurationSettings;
     private readonly Container _odataContainer;
 
     public ConfigurationService(
-        IHttpClientFactory httpClientFactory,
         IOptions<MSConfigurationSettings> msConfigurationSettingsOptions)
     {
-        _httpClient = httpClientFactory.CreateClient();
         _msConfigurationSettings = msConfigurationSettingsOptions.Value;
         _odataContainer = new Container(new Uri(_msConfigurationSettings.OdataBaseUrl));
     }
@@ -27,7 +24,7 @@ public class ConfigurationService : IConfigurationService
         {
             var rabbitMqConfig = _odataContainer.RabbitMqConfigs.OrderByDescending(c => c.CreationDate).FirstOrDefault();
 
-            return MethodResult<RabbitMqConfigModel>.CreateSuccessResult(rabbitMqConfig);
+            return await Task.FromResult(MethodResult<RabbitMqConfigModel>.CreateSuccessResult(rabbitMqConfig));
         }
         catch (Exception ex)
         {

@@ -43,17 +43,17 @@ public class RabbitMqProducerService : IRabbitMqProducerService, IDisposable
                 routingKey: routingKey,
                 basicProperties: null,
                 body: body
-            );  
+            );
 
             Console.WriteLine($"Message published to exchange {exchangeName} with routing key {routingKey}: {jsonMessage}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("send message proglem");
+            Console.WriteLine($"send message proglem : {ex.Message}");
         }
     }
 
-    public void Dispose()
+    void IDisposable.Dispose()
     {
         _channel?.Close();
         _connection?.Close();

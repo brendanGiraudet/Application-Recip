@@ -1,6 +1,7 @@
 ﻿using application_recip.Services.ConfigurationService;
 using application_recip.Services.RabbitMqProducerService;
 using application_recip.Services.RecipsService;
+using application_recip.Services.UserInfoService;
 using application_recip.Settings;
 
 namespace application_recip.Extensions;
@@ -12,6 +13,8 @@ public static class ServiceCollectionExtension
         services.AddTransient<IConfigurationService, ConfigurationService>();
         services.AddTransient<IRabbitMqProducerService, RabbitMqProducerService>();
         services.AddTransient<IRecipsService, RecipsService>();
+        
+        services.AddSingleton<IUserInfoService, UserInfoService>();
     }
 
     public static void AddConfigurations(this IServiceCollection services, IConfiguration configuration)

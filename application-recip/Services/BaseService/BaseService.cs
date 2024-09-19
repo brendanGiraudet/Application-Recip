@@ -1,4 +1,7 @@
-﻿using application_recip.Models;
+﻿using application_recip.Constants;
+using application_recip.Models;
+using application_recip.Services.RabbitMqProducerService;
+using application_recip.Services.UserInfoService;
 using application_recip.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.OData.Client;
@@ -18,13 +21,18 @@ public class BaseService<T> : IBaseService<T> where T : class
 
     protected Container _odataContainer;
 
-    protected DataServiceQuery<T> _dataServiceQuery;
+    public required DataServiceQuery<T> _dataServiceQuery;
+
+    protected IRabbitMqProducerService _rabbitMqProducerService;
+    protected IUserInfoService _userInfoService;
 
     public BaseService(
         string entitySetName,
         string propertyKeyName,
         IHttpClientFactory httpClientFactory,
-        IOptions<MSRecipSettings> msRecipSettingsOptions)
+        IOptions<MSRecipSettings> msRecipSettingsOptions,
+        IRabbitMqProducerService rabbitMqProducerService,
+        IUserInfoService userInfoService)
     {
         _httpClient = httpClientFactory.CreateClient();
 
@@ -47,14 +55,19 @@ public class BaseService<T> : IBaseService<T> where T : class
 
             eventArgs.Headers.Add("Accept-Language", CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
         };
+
+        _rabbitMqProducerService = rabbitMqProducerService;
+
+        _userInfoService = userInfoService;
     }
 
     /// <inheritdoc/>
-    public virtual async Task<ODataServiceResult<T>> GetDatagridItemsAsync(LoadDataArgs args, string expand = default(string), string select = default(string), bool? count = default(bool?))
+    public virtual async Task<ODataServiceResult<T>> GetDatagridItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null)
     {
         try
         {
-            var uri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}/{_entitySetName}");
+            var url = $"{_httpClient.BaseAddress?.AbsoluteUri}/{_entitySetName}";
+            var uri = new Uri(url);
             uri = uri.GetODataUri(filter: args.Filter, top: args.Top, skip: args.Skip, orderby: args.OrderBy, expand: expand, select: select, count: count);
 
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -81,7 +94,7 @@ public class BaseService<T> : IBaseService<T> where T : class
 
             var querySingle = new DataServiceQuerySingle<T>(_odataContainer, _dataServiceQuery.GetKeyPath(Serializer.GetKeyString(_odataContainer, _keys)));
 
-            var selectedItem = querySingle.GetValue();
+            var selectedItem = await querySingle.GetValueAsync();
 
             return MethodResult<T>.CreateSuccessResult(selectedItem);
         }
@@ -92,21 +105,19 @@ public class BaseService<T> : IBaseService<T> where T : class
     }
 
     /// <inheritdoc/>
-    public async Task<MethodResult<T>> CreateAsync(T itemToCreate)
+    public async Task<MethodResult<T>> CreateAsync(T itemToCreate, string routingKey)
     {
         try
         {
-            _odataContainer.Detach(itemToCreate);
-            _odataContainer.AddObject(_entitySetName, itemToCreate);
-
-            var response = await _odataContainer.SaveChangesAsync();
-
-            if (response.First().StatusCode != StatusCodes.Status201Created)
+            var message = new RabbitMqMessageBase<T>
             {
-                return MethodResult<T>.CreateErrorResult("Create_Problem");
-            }
-
-            _odataContainer.Detach(itemToCreate);
+                ApplicationName = RabbitmqConstants.ApplicationName,
+                RoutingKey = routingKey,
+                Timestamp = DateTime.UtcNow,
+                UserId = _userInfoService.GetUserId(),
+                Payload = itemToCreate
+            };
+            _rabbitMqProducerService.PublishMessage(message, RabbitmqConstants.RecipExchangeName, routingKey);
 
             return MethodResult<T>.CreateSuccessResult(itemToCreate, "Create_Success");
         }
@@ -119,11 +130,38 @@ public class BaseService<T> : IBaseService<T> where T : class
     }
 
     /// <inheritdoc/>
+    //public async Task<MethodResult<T>> CreateAsync(T itemToCreate)
+    //{
+    //    try
+    //    {
+    //        _odataContainer.Detach(itemToCreate);
+    //        _odataContainer.AddObject(_entitySetName, itemToCreate);
+
+    //        var response = await _odataContainer.SaveChangesAsync();
+
+    //        if (response.First().StatusCode != StatusCodes.Status201Created)
+    //        {
+    //            return MethodResult<T>.CreateErrorResult("Create_Problem");
+    //        }
+
+    //        _odataContainer.Detach(itemToCreate);
+
+    //        return MethodResult<T>.CreateSuccessResult(itemToCreate, "Create_Success");
+    //    }
+    //    catch (System.Exception ex)
+    //    {
+    //        await Console.Out.WriteLineAsync(ex.Message);
+
+    //        return MethodResult<T>.CreateErrorResult("Create_Problem");
+    //    }
+    //}
+
+    /// <inheritdoc/>
     public async Task<MethodResult<T>> UpdateAsync(decimal id, T itemToUpdate)
     {
         try
         {
-            var uri = new Uri($"{_httpClient.BaseAddress.AbsoluteUri}/{_entitySetName}/{id}");
+            var uri = new Uri($"{_httpClient.BaseAddress?.AbsoluteUri}/{_entitySetName}/{id}");
 
             var response = await _httpClient.PatchAsJsonAsync(uri, itemToUpdate);
 

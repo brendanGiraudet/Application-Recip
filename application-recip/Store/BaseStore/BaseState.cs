@@ -1,8 +1,8 @@
 ﻿using Radzen;
 
-namespace application_recip.Stores.BaseStore;
+namespace application_recip.Store.BaseStore;
 
-public record BaseState<T>
+public class BaseState<T>
 {
     public ODataEnumerable<T>? DatagridItems { get; set; }
 

@@ -9,7 +9,7 @@ public interface IBaseService<T>
     /// Récupere la liste des items filtrés et paginé
     /// </summary>
     /// <returns></returns>
-    Task<ODataServiceResult<T>> GetDatagridItemsAsync(LoadDataArgs args, string expand = default(string), string select = default(string), bool? count = default(bool?));
+    Task<ODataServiceResult<T>> GetDatagridItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null);
 
     /// <summary>
     /// Récupere un item
@@ -21,7 +21,7 @@ public interface IBaseService<T>
     /// Créer un item
     /// </summary>
     /// <returns></returns>
-    Task<MethodResult<T>> CreateAsync(T itemToCreate);
+    Task<MethodResult<T>> CreateAsync(T itemToCreate, string routingKey);
 
     /// <summary>
     /// Met à jour d'un item
