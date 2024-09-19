@@ -12,17 +12,26 @@
                 @* RecipName *@
                 <RadzenRow AlignItems="AlignItems.Center">
                     <RadzenColumn Size="12" SizeMD="4">
-                        <RadzenLabel Text="RecipName" 
+                        <RadzenLabel Text="RecipName"
                                      Component="RecipName" />
                     </RadzenColumn>
 
                     <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenTextBox @bind-Value="@_actualRecip.Name" 
-                                       Placeholder="Select something" 
-                                       Name="RecipName"/>
+                        <RadzenColumn Size="12" SizeMD="12">
+
+                            <RadzenTextBox @bind-Value="@_actualRecip.Name"
+                                           Placeholder="Enter the recip name"
+                                           Name="RecipName" />
+                        </RadzenColumn>
+
+                        <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenRequiredValidator Component="RecipName"
+                                                     Text="Recip name is required"
+                                                     Style="position: absolute" />
+                        </RadzenColumn>
                     </RadzenColumn>
                 </RadzenRow>
-                
+
                 @* RecipImage *@
                 <RadzenRow AlignItems="AlignItems.Center">
                     <RadzenColumn Size="12" SizeMD="4">
@@ -31,12 +40,21 @@
                     </RadzenColumn>
 
                     <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenTextBox @bind-Value="@_actualRecip.Image" 
-                                       Placeholder="Select something" 
-                                       Name="RecipImage" />
+                        <RadzenColumn Size="12" SizeMD="12">
+
+                            <RadzenTextBox @bind-Value="@_actualRecip.Image"
+                                           Placeholder="Enter the url of the recip image"
+                                           Name="RecipImage" />
+                        </RadzenColumn>
+
+                        <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenRequiredValidator Component="RecipImage"
+                                                     Text="Recip image is required"
+                                                     Style="position: absolute" />
+                        </RadzenColumn>
                     </RadzenColumn>
                 </RadzenRow>
-                
+
                 @* RecipPersonNumber *@
                 <RadzenRow AlignItems="AlignItems.Center">
                     <RadzenColumn Size="12" SizeMD="4">
@@ -45,12 +63,23 @@
                     </RadzenColumn>
 
                     <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenNumeric @bind-Value="@_actualRecip.PersonNumber" 
-                                       Placeholder="Select something" 
-                                       Name="RecipPersonNumber" />
+                        <RadzenColumn Size="12" SizeMD="12">
+
+                            <RadzenNumeric @bind-Value="@_actualRecip.PersonNumber"
+                                           Placeholder="Enter the number of persons"
+                                           Name="RecipPersonNumber" />
+                        </RadzenColumn>
+
+                        <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenNumericRangeValidator Component="RecipPersonNumber"
+                                                         Min="1" 
+                                                         Max="10" 
+                                                         Text="The number of the persons should be between 1 and 10" 
+                                                         Style="position: absolute" />
+                        </RadzenColumn>
                     </RadzenColumn>
                 </RadzenRow>
-                
+
                 @* RecipCookingDuration *@
                 <RadzenRow AlignItems="AlignItems.Center">
                     <RadzenColumn Size="12" SizeMD="4">
@@ -59,9 +88,21 @@
                     </RadzenColumn>
 
                     <RadzenColumn Size="12" SizeMD="8">
-                        <RadzenDatePicker @bind-Value="@_actualRecip.CookingDuration" 
-                                       Placeholder="Select something" 
-                                       Name="RecipCookingDuration" />
+                        <RadzenColumn Size="12" SizeMD="12">
+
+                            <RadzenDatePicker @bind-Value="@_actualRecip.CookingDuration"
+                                              Placeholder="Enter the cooking duration"
+                                              Name="RecipCookingDuration"
+                                              ShowTime="true" 
+                                              TimeOnly="true"
+                                              DateFormat="HH:mm" />
+                        </RadzenColumn>
+
+                        <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenRequiredValidator Component="RecipCookingDuration"
+                                                     Text="Cooking duration is required"
+                                                     Style="position: absolute" />
+                        </RadzenColumn>
                     </RadzenColumn>
                 </RadzenRow>
 
