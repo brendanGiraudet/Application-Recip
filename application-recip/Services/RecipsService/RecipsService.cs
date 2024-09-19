@@ -22,4 +22,6 @@ public class RecipsService(IHttpClientFactory httpClientFactory,
         userInfoService), 
     IRecipsService
 {
+
+    protected override string GetSuccessCreationItemMessages() => "Recip creation is in progress";
 }

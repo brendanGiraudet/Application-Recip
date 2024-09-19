@@ -119,7 +119,7 @@ public class BaseService<T> : IBaseService<T> where T : class
             };
             _rabbitMqProducerService.PublishMessage(message, RabbitmqConstants.RecipExchangeName, routingKey);
 
-            return MethodResult<T>.CreateSuccessResult(itemToCreate, "Create_Success");
+            return MethodResult<T>.CreateSuccessResult(itemToCreate, GetSuccessCreationItemMessages());
         }
         catch (System.Exception ex)
         {
@@ -128,6 +128,8 @@ public class BaseService<T> : IBaseService<T> where T : class
             return MethodResult<T>.CreateErrorResult("Create_Problem");
         }
     }
+
+    protected virtual string GetSuccessCreationItemMessages() => "Create_Success";
 
     /// <inheritdoc/>
     //public async Task<MethodResult<T>> CreateAsync(T itemToCreate)

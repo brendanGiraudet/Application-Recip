@@ -5,9 +5,9 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Radzen;
 
-namespace application_recip.Components.Layout.DisplayMessage;
+namespace application_recip.Components.MessageDisplayer;
 
-public partial class DisplayMessage
+public partial class MessageDisplayer
 {
     [Inject] public required NotificationService NotificationService { get; set; }
 
@@ -79,7 +79,7 @@ public partial class DisplayMessage
 
     private void ShowNotification()
     {
-        var message = new NotificationMessage { Severity = MessageNotificationSeverity, Summary = MessageSummary, Detail = MessageState.Value.Message, Duration = 10000 };
+        var message = new NotificationMessage { Severity = MessageNotificationSeverity, Summary = MessageSummary, Detail = MessageState.Value.Message, Duration = 5000 };
 
         NotificationService.Notify(message);
     }

@@ -1,4 +1,5 @@
-﻿using application_recip.Services.UserInfoService;
+﻿using application_recip.Constants;
+using application_recip.Services.UserInfoService;
 using application_recip.Store.BaseStore.Actions;
 using application_recip.Store.RecipsStore;
 using Fluxor;
@@ -36,6 +37,6 @@ public partial class RecipForm
 
     void Cancel()
     {
-        // redirect to list
+        NavigationManager.NavigateTo(PageUrlsConstants.HomePath);
     }
 }
