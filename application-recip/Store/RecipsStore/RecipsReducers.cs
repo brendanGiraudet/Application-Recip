@@ -11,4 +11,10 @@ public static class RecipsReducers
     public static RecipsState ReduceGetDatagridItemsResultAction(RecipsState state, GetDatagridItemsResultAction<RecipModel> action) => new RecipsState(currentState: state, datagridItems: action.Items);
 
     #endregion
+
+    #region GetItemAction
+    [ReducerMethod]
+    public static RecipsState ReduceGetItemResultAction(RecipsState state, GetItemResultAction<RecipModel> action) => new RecipsState(currentState: state, expectedItem: action.Item);
+
+    #endregion
 }

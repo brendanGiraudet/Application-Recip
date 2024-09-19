@@ -8,20 +8,24 @@ using ms_recip.Ms_recip.Models;
 
 namespace application_recip.Services.RecipsService;
 
-public class RecipsService(IHttpClientFactory httpClientFactory, 
+public class RecipsService : BaseService<RecipModel>, IRecipsService
+{
+    public RecipsService(IHttpClientFactory httpClientFactory,
     IOptions<MSRecipSettings> msRecipSettingsOptions,
     IRabbitMqProducerService rabbitMqProducerService,
-        IUserInfoService userInfoService) 
-    
-    : BaseService<RecipModel>(
+        IUserInfoService userInfoService)
+        : base (
         nameof(Container.Recips),
         nameof(RecipModel.Id),
         httpClientFactory,
         msRecipSettingsOptions,
         rabbitMqProducerService,
-        userInfoService), 
-    IRecipsService
-{
+        userInfoService)
+    {
+        _dataServiceQuery = _odataContainer.Recips; 
+    }
 
     protected override string GetSuccessCreationItemMessages() => "Recip creation is in progress";
+
+    protected override string GetSuccessUpdateItemMessages() => "Recip update is in progress";
 }

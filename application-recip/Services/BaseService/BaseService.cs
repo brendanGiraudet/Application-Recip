@@ -135,46 +135,21 @@ public class BaseService<T> : IBaseService<T> where T : class
     protected virtual string GetSuccessCreationItemMessages() => "Create_Success";
 
     /// <inheritdoc/>
-    //public async Task<MethodResult<T>> CreateAsync(T itemToCreate)
-    //{
-    //    try
-    //    {
-    //        _odataContainer.Detach(itemToCreate);
-    //        _odataContainer.AddObject(_entitySetName, itemToCreate);
-
-    //        var response = await _odataContainer.SaveChangesAsync();
-
-    //        if (response.First().StatusCode != StatusCodes.Status201Created)
-    //        {
-    //            return MethodResult<T>.CreateErrorResult("Create_Problem");
-    //        }
-
-    //        _odataContainer.Detach(itemToCreate);
-
-    //        return MethodResult<T>.CreateSuccessResult(itemToCreate, "Create_Success");
-    //    }
-    //    catch (System.Exception ex)
-    //    {
-    //        await Console.Out.WriteLineAsync(ex.Message);
-
-    //        return MethodResult<T>.CreateErrorResult("Create_Problem");
-    //    }
-    //}
-
-    /// <inheritdoc/>
-    public async Task<MethodResult<T>> UpdateAsync(decimal id, T itemToUpdate)
+    public async Task<MethodResult<T>> UpdateAsync(T itemToUpdate, string routingKey)
     {
         try
         {
-            var uri = new Uri($"{_httpClient.BaseAddress?.AbsoluteUri}/{_entitySetName}/{id}");
+            var message = new RabbitMqMessageBase<T>
+            {
+                ApplicationName = RabbitmqConstants.ApplicationName,
+                RoutingKey = routingKey,
+                Timestamp = DateTime.UtcNow,
+                UserId = _userInfoService.GetUserId(),
+                Payload = itemToUpdate
+            };
+            _rabbitMqProducerService.PublishMessage(message, RabbitmqConstants.RecipExchangeName, routingKey);
 
-            var response = await _httpClient.PatchAsJsonAsync(uri, itemToUpdate);
-
-            if (!response.IsSuccessStatusCode)
-                return MethodResult<T>.CreateErrorResult("Update_Problem");
-
-
-            return MethodResult<T>.CreateSuccessResult(itemToUpdate, "Update_Success");
+            return MethodResult<T>.CreateSuccessResult(itemToUpdate, GetSuccessUpdateItemMessages());
         }
         catch (System.Exception ex)
         {
@@ -183,6 +158,8 @@ public class BaseService<T> : IBaseService<T> where T : class
             return MethodResult<T>.CreateErrorResult("Update_Problem");
         }
     }
+
+    protected virtual string GetSuccessUpdateItemMessages() => "Update_Success";
 
     /// <inheritdoc/>
     public async Task<MethodResult<decimal>> DeleteAsync(decimal id)

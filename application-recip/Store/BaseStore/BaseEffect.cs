@@ -24,13 +24,13 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     [EffectMethod]
     public virtual async Task HandleGetItemAction(GetItemAction<T> getItemAction, IDispatcher dispatcher)
     {
-        //var getItemResult = await _baseService.GetItemAsync(getItemAction.ItemId);
+        var getItemResult = await _baseService.GetItemAsync(getItemAction.ItemId);
 
-        //if (getItemResult.IsSuccess && getItemResult.Value is not null)
-        //    dispatcher.Dispatch(new GetItemResultAction<T>(getItemResult.Value));
+        if (getItemResult.IsSuccess && getItemResult.Value is not null)
+            dispatcher.Dispatch(new GetItemResultAction<T>(getItemResult.Value));
 
-        //else
-        //    dispatcher.Dispatch(new SetMessageAction(getItemResult.Message, MessageType.Error));
+        else
+            dispatcher.Dispatch(new SetMessageAction(getItemResult.Message, MessageTypeEnum.Error));
     }
 
     [EffectMethod]
@@ -54,19 +54,19 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     [EffectMethod]
     public async virtual Task HandleUpdateItemAction(UpdateItemAction<T> updateItemAction, IDispatcher dispatcher)
     {
-        //var updateItemResult = await _baseService.UpdateAsync(updateItemAction.Id, updateItemAction.ItemToUpdate);
+        var updateResult = await _baseService.UpdateAsync(updateItemAction.ItemToUpdate, RabbitmqConstants.UpdateRecipRoutingKey);
 
-        //var updatedItem = updateItemAction.ItemToUpdate;
-        //var messageType = MessageType.Error;
+        var updatedItem = updateItemAction.ItemToUpdate;
+        var messageType = MessageTypeEnum.Error;
 
-        //if (updateItemResult.IsSuccess)
-        //{
-        //    updatedItem = updateItemResult.Value;
-        //    messageType = MessageType.Success;
-        //}
+        if (updateResult.IsSuccess)
+        {
+            updatedItem = updateResult.Value;
+            messageType = MessageTypeEnum.Success;
+        }
 
-        //dispatcher.Dispatch(new UpdateItemResultAction<T>(updatedItem, updateItemResult.IsSuccess));
-        //dispatcher.Dispatch(new SetMessageAction(updateItemResult.Message, messageType));
+        dispatcher.Dispatch(new UpdateItemResultAction<T>(updatedItem, updateResult.IsSuccess));
+        dispatcher.Dispatch(new SetMessageAction(updateResult.Message ?? string.Empty, messageType));
     }
 
     [EffectMethod]

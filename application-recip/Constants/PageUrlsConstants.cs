@@ -6,5 +6,5 @@ public static class PageUrlsConstants
     public const string NotificationsPath = "/notifications";
     
     public const string RecipsPath = "/recips";
-    public const string RecipFormPath = "/recips/add";
+    public static string GetRecipFormPath(Guid? id = null) => id is null ? "/recips/add" : $"/recips/{id}";
 }

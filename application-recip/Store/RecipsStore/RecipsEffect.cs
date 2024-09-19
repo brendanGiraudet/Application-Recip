@@ -15,6 +15,12 @@ public class RecipsEffect(IRecipsService recipsService,
     [EffectMethod]
     public virtual async Task HandleCreateItemResultAction(CreateItemResultAction<RecipModel> createItemResultAction, IDispatcher dispatcher)
     {
-        if (createItemResultAction.IsSuccess) navigationManager.NavigateTo(PageUrlsConstants.HomePath);
+        if (createItemResultAction.IsSuccess) navigationManager.NavigateTo(PageUrlsConstants.RecipsPath);
+    }
+    
+    [EffectMethod]
+    public virtual async Task HandleUpdateItemResultAction(UpdateItemResultAction<RecipModel> action, IDispatcher dispatcher)
+    {
+        if (action.IsSuccess) navigationManager.NavigateTo(PageUrlsConstants.RecipsPath);
     }
 }

@@ -1,10 +1,12 @@
 ﻿@page "/recips/add"
+@page "/recips/{RecipId:guid}"
 @using ms_recip.Ms_recip.Models
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <h3>RecipForm</h3>
 
 
-<RadzenTemplateForm Data="@_actualRecip" Submit="@((RecipModel args) => { Submit(args); })">
+<RadzenTemplateForm Data="@RecipsState.Value.ExpectedItem" Submit="@((RecipModel args) => { Submit(args); })">
     <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
         <RadzenColumn Size="12" SizeMD="6">
             <RadzenStack>
@@ -19,7 +21,7 @@
                     <RadzenColumn Size="12" SizeMD="8">
                         <RadzenColumn Size="12" SizeMD="12">
 
-                            <RadzenTextBox @bind-Value="@_actualRecip.Name"
+                            <RadzenTextBox @bind-Value="@RecipsState.Value.ExpectedItem.Name"
                                            Placeholder="Enter the recip name"
                                            Name="RecipName" />
                         </RadzenColumn>
@@ -42,7 +44,7 @@
                     <RadzenColumn Size="12" SizeMD="8">
                         <RadzenColumn Size="12" SizeMD="12">
 
-                            <RadzenTextBox @bind-Value="@_actualRecip.Image"
+                            <RadzenTextBox @bind-Value="@RecipsState.Value.ExpectedItem.Image"
                                            Placeholder="Enter the url of the recip image"
                                            Name="RecipImage" />
                         </RadzenColumn>
@@ -65,7 +67,7 @@
                     <RadzenColumn Size="12" SizeMD="8">
                         <RadzenColumn Size="12" SizeMD="12">
 
-                            <RadzenNumeric @bind-Value="@_actualRecip.PersonNumber"
+                            <RadzenNumeric @bind-Value="@RecipsState.Value.ExpectedItem.PersonNumber"
                                            Placeholder="Enter the number of persons"
                                            Name="RecipPersonNumber" />
                         </RadzenColumn>
@@ -90,7 +92,7 @@
                     <RadzenColumn Size="12" SizeMD="8">
                         <RadzenColumn Size="12" SizeMD="12">
 
-                            <RadzenDatePicker @bind-Value="@_actualRecip.CookingDuration"
+                            <RadzenDatePicker @bind-Value="@RecipsState.Value.ExpectedItem.CookingDuration"
                                               Placeholder="Enter the cooking duration"
                                               Name="RecipCookingDuration"
                                               ShowTime="true" 

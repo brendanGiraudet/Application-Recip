@@ -4,7 +4,7 @@
 
 <h3>Recips</h3>
 
-<RadzenButton Icon="@MaterialIconConstants.Add" Click="@RedirectToRecipFormPage" />
+<RadzenButton Icon="@MaterialIconConstants.Add" Click="@(() => RedirectToRecipFormPage())" />
 
 @if (RecipsState.Value.DatagridItems.Count() > 0)
 {
@@ -12,7 +12,8 @@
     @foreach (var recip in RecipsState.Value.DatagridItems)
     {
         <RadzenCard class="rz-my-12 rz-mx-auto"
-                    Style="max-width: 420px">
+                    Style="max-width: 420px"
+                    @onclick="@(() => RedirectToRecipFormPage(recip.Id))">
             <RadzenStack Orientation="Orientation.Horizontal"
                          JustifyContent="JustifyContent.Center"
                          Gap="1rem"

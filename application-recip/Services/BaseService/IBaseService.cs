@@ -27,7 +27,7 @@ public interface IBaseService<T>
     /// Met à jour d'un item
     /// </summary>
     /// <returns></returns>
-    Task<MethodResult<T>> UpdateAsync(decimal id, T itemToUpdate);
+    Task<MethodResult<T>> UpdateAsync(T itemToUpdate, string routingKey);
 
     /// <summary>
     /// Suppression d'un item

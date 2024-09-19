@@ -17,22 +17,37 @@ public partial class RecipForm
     [Inject] public required NavigationManager NavigationManager { get; set; }
     
     [Inject] public required IUserInfoService UserInfoService { get; set; }
+    
+    [Parameter] public Guid? RecipId { get; set; }
 
-    private readonly RecipModel _actualRecip = new();
+    private RecipModel _actualRecip = new();
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        _actualRecip.Id = Guid.NewGuid();
-        
-        _actualRecip.Authorname = UserInfoService.GetUserName();
-        _actualRecip.AuthorId = UserInfoService.GetUserId();
+        if(RecipId is not null)
+        {
+            Dispatcher.Dispatch(new GetItemAction<RecipModel>(RecipId.Value));
+        }
     }
 
     void Submit(RecipModel model)
     {
-        Dispatcher.Dispatch(new CreateItemAction<RecipModel>(model));
+        if(RecipId is null)
+        {
+            RecipsState.Value.ExpectedItem.Id = Guid.NewGuid();
+
+            RecipsState.Value.ExpectedItem.Authorname = UserInfoService.GetUserName();
+            RecipsState.Value.ExpectedItem.AuthorId = UserInfoService.GetUserId();
+            
+            Dispatcher.Dispatch(new CreateItemAction<RecipModel>(model));
+        }
+        else
+        {
+            Dispatcher.Dispatch(new UpdateItemAction<RecipModel>(model));
+        }
+
     }
 
     void Cancel()
