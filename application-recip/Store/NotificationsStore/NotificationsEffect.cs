@@ -7,7 +7,7 @@ namespace application_recip.Store.BaseStore;
 public class NotificationsEffect(INotificationsService _notificationsService)
 {
     [EffectMethod]
-    public async Task HandleGetNotificationAction(GetNotificationAction action, IDispatcher dispatcher)
+    public async Task HandleGetNotificationAction(GetNotificationsAction action, IDispatcher dispatcher)
     {
         var result = await _notificationsService.GetNotificationsAsync();
 

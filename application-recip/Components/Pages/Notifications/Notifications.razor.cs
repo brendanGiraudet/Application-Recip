@@ -15,7 +15,12 @@ public partial class Notifications
     {
         base.OnInitialized();
 
-        Dispatcher.Dispatch(new GetNotificationAction());
+        Dispatcher.Dispatch(new GetNotificationsAction());
+    }
+
+    public void Getnotif()
+    {
+        Dispatcher.Dispatch(new GetNotificationsAction());
     }
 
     private void OnClose()

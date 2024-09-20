@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   application-recip:
-    image: bakayarusama/application-recip:1.0.6
+    image: bakayarusama/application-recip:1.0.7
     container_name: application-recip
     
     build:
@@ -15,7 +15,7 @@ services:
     
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ApplicationVersion: 1.0.6
+      ApplicationVersion: 1.0.7
 
       MSConfigurationSettings__OdataBaseUrl: "https://ms-configuration-local.brendan-giraudet.com/odata"
       
@@ -24,5 +24,7 @@ services:
       MSNotificationSettings__OdataBaseUrl: "https://ms-notification-local.brendan-giraudet.com/odata"
       
       RabbitMqQueueName: "application-recip"
+      
+      Notifications__PollingInterval: "10000"
       
     restart: always

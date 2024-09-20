@@ -27,6 +27,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddConfigurations(builder.Configuration);
 builder.Services.AddServices();
+builder.Services.AddCustomHostedServices();
 
 
 var app = builder.Build();

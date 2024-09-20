@@ -4,9 +4,9 @@ using ms_notification.Ms_notification.Models;
 namespace application_recip.Store.MessageStore;
 
 [FeatureState]
-public class NotificationsState
+public record NotificationsState
 {
-    public IEnumerable<NotificationModel> Notifications { get; }
+    public IEnumerable<NotificationModel> Notifications { get; set; }
 
     private NotificationsState()
     {
