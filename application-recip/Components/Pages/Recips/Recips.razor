@@ -3,8 +3,17 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <h3>Recips</h3>
+
 <RadzenRow>
     <RadzenButton Icon="@MaterialIconConstants.Add" Click="@(() => RedirectToRecipFormPage())" />
+</RadzenRow>
+
+<br/>
+
+<RadzenRow JustifyContent="JustifyContent.Center">
+    <RadzenColumn Size="12" SizeMD="8">
+        <SearchTextbox LaunchSearchCallback="@SearchRecips" />
+    </RadzenColumn>
 </RadzenRow>
 
 @if (RecipsState.Value.Items.Count() > 0)
