@@ -1,6 +1,4 @@
-﻿using application_recip.Constants;
-using application_recip.Models;
-using application_recip.Services.BaseService;
+﻿using application_recip.Services.BaseService;
 using application_recip.Services.RabbitMqProducerService;
 using application_recip.Services.UserInfoService;
 using application_recip.Settings;
