@@ -18,11 +18,12 @@ public class RecipsService : BaseService<RecipModel>, IRecipsService
         nameof(Container.Recips),
         nameof(RecipModel.Id),
         httpClientFactory,
-        msRecipSettingsOptions,
+        msRecipSettingsOptions.Value.OdataBaseUrl,
         rabbitMqProducerService,
-        userInfoService)
+        userInfoService,
+        new Container(new(msRecipSettingsOptions.Value.OdataBaseUrl)))
     {
-        _dataServiceQuery = _odataContainer.Recips; 
+        _dataServiceQuery = new Container(new(msRecipSettingsOptions.Value.OdataBaseUrl)).Recips; 
     }
 
     protected override string GetSuccessCreationItemMessages() => "Recip creation is in progress";

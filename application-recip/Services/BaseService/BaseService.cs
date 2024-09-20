@@ -2,10 +2,7 @@
 using application_recip.Models;
 using application_recip.Services.RabbitMqProducerService;
 using application_recip.Services.UserInfoService;
-using application_recip.Settings;
-using Microsoft.Extensions.Options;
 using Microsoft.OData.Client;
-using ms_recip.Default;
 using Radzen;
 using System.Globalization;
 
@@ -19,31 +16,37 @@ public class BaseService<T> : IBaseService<T> where T : class
 
     protected string _propertyKeyName;
 
-    protected Container _odataContainer;
+    protected DataServiceContext _odataContainer;
+
+    protected string _odataUrl;
 
     public required DataServiceQuery<T> _dataServiceQuery;
 
     protected IRabbitMqProducerService _rabbitMqProducerService;
     protected IUserInfoService _userInfoService;
-    protected MSRecipSettings _mSRecipSettings;
 
     public BaseService(
         string entitySetName,
         string propertyKeyName,
         IHttpClientFactory httpClientFactory,
-        IOptions<MSRecipSettings> msRecipSettingsOptions,
+        string odataUrl,
         IRabbitMqProducerService rabbitMqProducerService,
-        IUserInfoService userInfoService)
+        IUserInfoService userInfoService,
+        DataServiceContext odataContainer)
     {
-        _httpClient = httpClientFactory.CreateClient();
-
         _entitySetName = entitySetName;
 
         _propertyKeyName = propertyKeyName;
 
-        _mSRecipSettings = msRecipSettingsOptions.Value;
+        _httpClient = httpClientFactory.CreateClient();
 
-        _odataContainer = new Container(new(_mSRecipSettings.OdataBaseUrl));
+        _odataUrl = odataUrl;
+
+        _rabbitMqProducerService = rabbitMqProducerService;
+
+        _userInfoService = userInfoService;
+
+        _odataContainer = odataContainer;
 
         _odataContainer.BuildingRequest += (sender, eventArgs) =>
         {
@@ -58,10 +61,6 @@ public class BaseService<T> : IBaseService<T> where T : class
 
             eventArgs.Headers.Add("Accept-Language", CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
         };
-
-        _rabbitMqProducerService = rabbitMqProducerService;
-
-        _userInfoService = userInfoService;
     }
 
     /// <inheritdoc/>
@@ -69,7 +68,7 @@ public class BaseService<T> : IBaseService<T> where T : class
     {
         try
         {
-            var url = $"{_mSRecipSettings.OdataBaseUrl}/{_entitySetName}";
+            var url = $"{_odataUrl}/{_entitySetName}";
             var uri = new Uri(url);
             uri = uri.GetODataUri(filter: args.Filter, top: args.Top, skip: args.Skip, orderby: args.OrderBy, expand: expand, select: select, count: count);
 
@@ -108,33 +107,33 @@ public class BaseService<T> : IBaseService<T> where T : class
     }
 
     /// <inheritdoc/>
-    public async Task<MethodResult<T>> CreateAsync(T itemToCreate, string routingKey)
+    public async Task<MethodResult<T>> CreateAsync(T itemToCreate, string exchangeName, string routingKey)
     {
-        return await SendRabbitMqMessageAsync(itemToCreate, routingKey, GetSuccessCreationItemMessages(), GetFailedCreationItemMessages());
+        return await SendRabbitMqMessageAsync(itemToCreate, exchangeName, routingKey, GetSuccessCreationItemMessages(), GetFailedCreationItemMessages());
     }
 
     protected virtual string GetSuccessCreationItemMessages() => "Create_Success";
     protected virtual string GetFailedCreationItemMessages() => "Create_Error";
 
     /// <inheritdoc/>
-    public async Task<MethodResult<T>> UpdateAsync(T itemToUpdate, string routingKey)
+    public async Task<MethodResult<T>> UpdateAsync(T itemToUpdate, string exchangeName, string routingKey)
     {
-        return await SendRabbitMqMessageAsync(itemToUpdate, routingKey, GetSuccessUpdateItemMessages(), GetFailedUpdateItemMessages());
+        return await SendRabbitMqMessageAsync(itemToUpdate, exchangeName, routingKey, GetSuccessUpdateItemMessages(), GetFailedUpdateItemMessages());
     }
 
     protected virtual string GetSuccessUpdateItemMessages() => "Update_Success";
     protected virtual string GetFailedUpdateItemMessages() => "Update_Error";
 
     /// <inheritdoc/>
-    public async Task<MethodResult<T>> DeleteAsync(T itemToDelete, string routingKey)
+    public async Task<MethodResult<T>> DeleteAsync(T itemToDelete, string exchangeName, string routingKey)
     {
-        return await SendRabbitMqMessageAsync(itemToDelete, routingKey, GetSuccessDeleteItemMessages(), GetFailedDeleteItemMessages());
+        return await SendRabbitMqMessageAsync(itemToDelete, exchangeName, routingKey, GetSuccessDeleteItemMessages(), GetFailedDeleteItemMessages());
     }
 
     protected virtual string GetSuccessDeleteItemMessages() => "Delete_Success";
     protected virtual string GetFailedDeleteItemMessages() => "Delete_Error";
 
-    public async Task<MethodResult<T>> SendRabbitMqMessageAsync(T item, string routingKey, string successMessage, string failedMessage)
+    public async Task<MethodResult<T>> SendRabbitMqMessageAsync(T item, string exchangeName, string routingKey, string successMessage, string failedMessage)
     {
         try
         {
@@ -146,7 +145,7 @@ public class BaseService<T> : IBaseService<T> where T : class
                 UserId = _userInfoService.GetUserId(),
                 Payload = item
             };
-            _rabbitMqProducerService.PublishMessage(message, RabbitmqConstants.RecipExchangeName, routingKey);
+            _rabbitMqProducerService.PublishMessage(message, exchangeName, routingKey);
 
             return MethodResult<T>.CreateSuccessResult(item, successMessage);
         }

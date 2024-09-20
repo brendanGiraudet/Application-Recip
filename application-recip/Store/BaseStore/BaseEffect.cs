@@ -36,9 +36,9 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     [EffectMethod]
     public virtual async Task HandleCreateItemAction(CreateItemAction<T> itemCreationAction, IDispatcher dispatcher)
     {
-        var itemCreationResult = await _baseService.CreateAsync(itemCreationAction.ItemToCreate, RabbitmqConstants.CreateRecipRoutingKey);
+        var itemCreationResult = await _baseService.CreateAsync(itemCreationAction.Item, itemCreationAction.ExchangeName, itemCreationAction.RoutingKey);
 
-        var createdItem = itemCreationAction.ItemToCreate;
+        var createdItem = itemCreationAction.Item;
         var messageType = MessageTypeEnum.Error;
 
         if (itemCreationResult.IsSuccess)
@@ -54,9 +54,9 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     [EffectMethod]
     public async virtual Task HandleUpdateItemAction(UpdateItemAction<T> updateItemAction, IDispatcher dispatcher)
     {
-        var updateResult = await _baseService.UpdateAsync(updateItemAction.ItemToUpdate, RabbitmqConstants.UpdateRecipRoutingKey);
+        var updateResult = await _baseService.UpdateAsync(updateItemAction.Item, updateItemAction.ExchangeName, updateItemAction.RoutingKey);
 
-        var updatedItem = updateItemAction.ItemToUpdate;
+        var updatedItem = updateItemAction.Item;
         var messageType = MessageTypeEnum.Error;
 
         if (updateResult.IsSuccess)
@@ -72,7 +72,7 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     [EffectMethod]
     public async Task HandleDeleteItemAction(DeleteItemAction<T> deleteItemAction, IDispatcher dispatcher)
     {
-        var deleteResult = await _baseService.DeleteAsync(deleteItemAction.Item, RabbitmqConstants.DeleteRecipRoutingKey);
+        var deleteResult = await _baseService.DeleteAsync(deleteItemAction.Item, deleteItemAction.ExchangeName, deleteItemAction.RoutingKey);
 
         var deletedItem = deleteItemAction.Item;
         var messageType = MessageTypeEnum.Error;

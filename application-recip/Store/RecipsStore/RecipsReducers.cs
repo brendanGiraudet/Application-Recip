@@ -19,6 +19,11 @@ public static class RecipsReducers
 
     #endregion
 
+    #region InitializationAction
+    [ReducerMethod]
+    public static RecipsState ReduceInitializationAction(RecipsState state, InitializationAction<RecipModel> action) => new RecipsState(currentState: state, expectedItem: action.Item);
+    #endregion
+
     #region CreateItemResultAction
     [ReducerMethod]
     public static RecipsState ReduceCreateItemResultAction(RecipsState state, CreateItemResultAction<RecipModel> action)

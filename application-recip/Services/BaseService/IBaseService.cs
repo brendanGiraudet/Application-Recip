@@ -21,17 +21,17 @@ public interface IBaseService<T>
     /// Créer un item
     /// </summary>
     /// <returns></returns>
-    Task<MethodResult<T>> CreateAsync(T itemToCreate, string routingKey);
+    Task<MethodResult<T>> CreateAsync(T itemToCreate, string exchangeName, string routingKey);
 
     /// <summary>
     /// Met à jour d'un item
     /// </summary>
     /// <returns></returns>
-    Task<MethodResult<T>> UpdateAsync(T itemToUpdate, string routingKey);
+    Task<MethodResult<T>> UpdateAsync(T itemToUpdate, string exchangeName, string routingKey);
 
     /// <summary>
     /// Suppression d'un item
     /// </summary>
     /// <returns></returns>
-    Task<MethodResult<T>> DeleteAsync(T itemToDelete, string routingKey);
+    Task<MethodResult<T>> DeleteAsync(T itemToDelete, string exchangeName, string routingKey);
 }
