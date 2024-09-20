@@ -7,7 +7,7 @@
 @if (NotificationsState.Value.Notifications.Count() > 0)
 {
     <RadzenStack Gap="0" class="rz-py-8 rz-px-12">
-        @foreach (var notification in NotificationsState.Value.Notifications)
+        @foreach (var notification in NotificationsState.Value.Notifications.OrderByDescending(n => n.Timestamp))
         {
             <RadzenAlert Close=@OnClose>
                 @notification.Content
