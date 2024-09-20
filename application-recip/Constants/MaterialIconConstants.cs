@@ -11,4 +11,6 @@ public static class MaterialIconConstants
     public const string Save = "save";
     public const string Cancel = "cancel";
     public const string Delete = "delete";
+    public const string People = "people";
+    public const string Timer = "timer";
 }

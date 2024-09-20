@@ -3,34 +3,46 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <h3>Recips</h3>
-
-<RadzenButton Icon="@MaterialIconConstants.Add" Click="@(() => RedirectToRecipFormPage())" />
+<RadzenRow>
+    <RadzenButton Icon="@MaterialIconConstants.Add" Click="@(() => RedirectToRecipFormPage())" />
+</RadzenRow>
 
 @if (RecipsState.Value.Items.Count() > 0)
 {
-     <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
-    @foreach (var recip in RecipsState.Value.Items.OrderBy(r => r.Name))
-    {
-        <RadzenCard class="rz-my-12 rz-mx-auto"
-                    Style="max-width: 420px"
-                    @onclick="@(() => RedirectToRecipFormPage(recip.Id))">
-            <RadzenStack Orientation="Orientation.Horizontal"
-                         JustifyContent="JustifyContent.Center"
-                         Gap="1rem"
-                         class="rz-p-4">
-                <RadzenImage Path="@recip.Image"
-                             Style="width: 15rem; height: 15rem; border-radius: 50%;" />
-            </RadzenStack>
+    <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+        @foreach (var recip in RecipsState.Value.Items.OrderBy(r => r.Name))
+        {
+            <RadzenCard class="rz-my-12 rz-mx-auto"
+                        Style="max-width: 420px"
+                        @onclick="@(() => RedirectToRecipFormPage(recip.Id))">
+                <RadzenStack Orientation="Orientation.Horizontal"
+                             JustifyContent="JustifyContent.Center"
+                             Gap="1rem"
+                             class="rz-p-4">
+                    <RadzenImage Path="@recip.Image"
+                                 Style="width: 15rem; height: 15rem; border-radius: 50%;" />
+                </RadzenStack>
 
-            <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
-                <RadzenText TextStyle="TextStyle.H6"
-                            class="rz-color-on-primary-light">
-                    <strong>@recip.Name</strong>
-                </RadzenText>
+                <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+                    <RadzenRow>
+                        <RadzenText TextStyle="TextStyle.H6"
+                                    class="rz-color-on-primary-light">
+                            <strong>@recip.Name.ToUpper()</strong>
+                        </RadzenText>
+                    </RadzenRow>
+
+                    <RadzenRow>
+                        <RadzenIcon Icon="@MaterialIconConstants.People" />
+                        <RadzenText Text="@recip.PersonNumber.ToString()" />
+
+                        <RadzenIcon Icon="@MaterialIconConstants.Timer" />
+                        <RadzenText Text="@recip.CookingDuration.Value.ToString("HH:mm")" />
+                    </RadzenRow>
+
+                </RadzenCard>
             </RadzenCard>
-        </RadzenCard>
-    }
-     </RadzenRow>
+        }
+    </RadzenRow>
 }
 else
 {
