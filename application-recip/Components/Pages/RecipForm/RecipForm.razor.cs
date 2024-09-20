@@ -30,6 +30,10 @@ public partial class RecipForm
         {
             Dispatcher.Dispatch(new GetItemAction<RecipModel>(RecipId.Value));
         }
+        else
+        {
+            Dispatcher.Dispatch(new InitializationAction<RecipModel>(new RecipModel()));
+        }
     }
 
     void Submit(RecipModel model)
@@ -41,13 +45,12 @@ public partial class RecipForm
             RecipsState.Value.ExpectedItem.Authorname = UserInfoService.GetUserName();
             RecipsState.Value.ExpectedItem.AuthorId = UserInfoService.GetUserId();
             
-            Dispatcher.Dispatch(new CreateItemAction<RecipModel>(model));
+            Dispatcher.Dispatch(new CreateItemAction<RecipModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.CreateRecipRoutingKey));
         }
         else
         {
-            Dispatcher.Dispatch(new UpdateItemAction<RecipModel>(model));
+            Dispatcher.Dispatch(new UpdateItemAction<RecipModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.UpdateRecipRoutingKey));
         }
-
     }
 
     void Cancel()
@@ -57,6 +60,6 @@ public partial class RecipForm
 
     void Delete()
     {
-        Dispatcher.Dispatch(new DeleteItemAction<RecipModel>(RecipsState.Value.ExpectedItem));
+        Dispatcher.Dispatch(new DeleteItemAction<RecipModel>(RecipsState.Value.ExpectedItem, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.DeleteRecipRoutingKey));
     }
 }
