@@ -64,7 +64,7 @@ public class BaseService<T> : IBaseService<T> where T : class
     }
 
     /// <inheritdoc/>
-    public virtual async Task<ODataServiceResult<T>> GetDatagridItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null)
+    public virtual async Task<MethodResult<ODataServiceResult<T>>> GetDatagridItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null)
     {
         try
         {
@@ -76,11 +76,13 @@ public class BaseService<T> : IBaseService<T> where T : class
 
             var response = await _httpClient.SendAsync(httpRequestMessage);
 
-            return await response.ReadAsync<ODataServiceResult<T>>();
+            var values = await response.ReadAsync<ODataServiceResult<T>>();
+
+            return MethodResult<ODataServiceResult<T>>.CreateSuccessResult(values);
         }
         catch (System.Exception ex)
         {
-            return new();
+            return MethodResult<ODataServiceResult<T>>.CreateErrorResult(ex.Message);
         }
     }
 

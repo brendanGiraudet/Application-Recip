@@ -6,10 +6,10 @@
 
 <RadzenButton Icon="@MaterialIconConstants.Add" Click="@(() => RedirectToRecipFormPage())" />
 
-@if (RecipsState.Value.DatagridItems.Count() > 0)
+@if (RecipsState.Value.Items.Count() > 0)
 {
      <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
-    @foreach (var recip in RecipsState.Value.DatagridItems.OrderBy(r => r.Name))
+    @foreach (var recip in RecipsState.Value.Items.OrderBy(r => r.Name))
     {
         <RadzenCard class="rz-my-12 rz-mx-auto"
                     Style="max-width: 420px"

@@ -1,4 +1,4 @@
-﻿using application_recip.Store.MessageStore.Actions;
+﻿using application_recip.Store.NotificationsStore.Actions;
 using Fluxor;
 
 namespace application_recip.HostedServices.NotificationsHostedService;
@@ -15,7 +15,7 @@ public class NotificationsHostedService : IHostedService, IDisposable
     {
         _pollingInterval = int.Parse(configuration["Notifications:PollingInterval"] ?? "5000");
 
-        _timer = new Timer(DoStuff, null, Timeout.Infinite, _pollingInterval);
+        _timer = new Timer(GetNotifications, null, Timeout.Infinite, _pollingInterval);
 
         _dispatcher = dispatcher;
     }
@@ -25,7 +25,7 @@ public class NotificationsHostedService : IHostedService, IDisposable
         _timer.Change(0, _pollingInterval);
     }
 
-    private void DoStuff(object state)
+    private void GetNotifications(object state)
     {
         _dispatcher.Dispatch(new GetNotificationsAction());
     }

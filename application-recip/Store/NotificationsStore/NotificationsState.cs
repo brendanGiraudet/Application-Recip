@@ -1,20 +1,23 @@
-﻿using Fluxor;
+﻿using application_recip.Store.BaseStore;
+using Fluxor;
 using ms_notification.Ms_notification.Models;
+using Radzen;
 
 namespace application_recip.Store.MessageStore;
 
 [FeatureState]
-public record NotificationsState
+public class NotificationsState : BaseState<NotificationModel>
 {
-    public IEnumerable<NotificationModel> Notifications { get; set; }
-
     private NotificationsState()
     {
-        Notifications = [];
+
     }
 
-    public NotificationsState(NotificationsState? currentState = null, IEnumerable<NotificationModel>? notifications = null)
-    {
-        Notifications = notifications ?? (currentState != null ? currentState.Notifications : []);
-    }
+    public NotificationsState(
+        NotificationsState? currentState = null,
+        ODataEnumerable<NotificationModel>? datagridItems = null,
+        int? totalItems = null,
+        NotificationModel? expectedItem = default
+        )
+        : base(currentState, datagridItems, totalItems, expectedItem) { }
 }

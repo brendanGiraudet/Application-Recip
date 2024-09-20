@@ -13,12 +13,16 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     [EffectMethod]
     public virtual async Task HandleGetDatagridItemsAction(GetDatagridItemsAction<T> getItemsWithFilterAction, IDispatcher dispatcher)
     {
-        var filteredItemsResult = await _baseService.GetDatagridItemsAsync(args: getItemsWithFilterAction.LoadDataArgs, expand: getItemsWithFilterAction.Expand, select: getItemsWithFilterAction.Select, count: getItemsWithFilterAction.Count);
+        var getItemsResult = await _baseService.GetDatagridItemsAsync(args: getItemsWithFilterAction.LoadDataArgs, expand: getItemsWithFilterAction.Expand, select: getItemsWithFilterAction.Select, count: getItemsWithFilterAction.Count);
 
-        var items = filteredItemsResult.Value.AsODataEnumerable();
-        var top = getItemsWithFilterAction.LoadDataArgs.Top ?? 10;
+        if(getItemsResult.IsSuccess)
+        {
+            var items = getItemsResult.Value.Value.AsODataEnumerable();
+            var top = getItemsWithFilterAction.LoadDataArgs.Top ?? 10;
+            var count = getItemsResult.Value?.Count ?? 0;
 
-        dispatcher.Dispatch(new GetDatagridItemsResultAction<T>(items, filteredItemsResult.Count, top));
+            dispatcher.Dispatch(new GetDatagridItemsResultAction<T>(items, count, top));
+        }
     }
 
     [EffectMethod]

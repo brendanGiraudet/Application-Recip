@@ -28,7 +28,7 @@ public static class RecipsReducers
     [ReducerMethod]
     public static RecipsState ReduceCreateItemResultAction(RecipsState state, CreateItemResultAction<RecipModel> action)
     {
-        var datagridItems = state.DatagridItems.AsEnumerable();
+        var datagridItems = state.Items.AsEnumerable();
 
         if (action.IsSuccess)
         {
@@ -44,7 +44,7 @@ public static class RecipsReducers
     [ReducerMethod]
     public static RecipsState ReduceUpdateItemResultAction(RecipsState state, UpdateItemResultAction<RecipModel> action)
     {
-        var datagridItems = state.DatagridItems.AsEnumerable();
+        var datagridItems = state.Items.AsEnumerable();
 
         if (action.IsSuccess)
         {
@@ -62,7 +62,7 @@ public static class RecipsReducers
     [ReducerMethod]
     public static RecipsState ReduceDeleteItemResultAction(RecipsState state, DeleteItemResultAction<RecipModel> action)
     {
-        var datagridItems = state.DatagridItems.AsEnumerable();
+        var datagridItems = state.Items.AsEnumerable();
 
         if (action.IsSuccess)
         {

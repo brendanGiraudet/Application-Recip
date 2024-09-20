@@ -1,16 +1,29 @@
-﻿using application_recip.Services.NotificationsService;
-using application_recip.Store.MessageStore.Actions;
+﻿using application_recip.Constants;
+using application_recip.Services.NotificationsService;
+using application_recip.Services.UserInfoService;
+using application_recip.Store.BaseStore.Actions;
+using application_recip.Store.NotificationsStore.Actions;
 using Fluxor;
+using ms_notification.Ms_notification.Models;
+using Radzen;
 
 namespace application_recip.Store.BaseStore;
 
-public class NotificationsEffect(INotificationsService _notificationsService)
+public class NotificationsEffect(
+    INotificationsService _notificationsService,
+    IUserInfoService userInfoService) 
+    
+    : BaseEffect<NotificationModel>(_notificationsService)
 {
     [EffectMethod]
-    public async Task HandleGetNotificationAction(GetNotificationsAction action, IDispatcher dispatcher)
+    public virtual async Task HandleGetNotificationsAction(GetNotificationsAction action, IDispatcher dispatcher)
     {
-        var result = await _notificationsService.GetNotificationsAsync();
 
-        if (result.IsSuccess) dispatcher.Dispatch(new GetNotificationResultAction(result.Value));
+        var loadArgs = new LoadDataArgs();
+        loadArgs.Filter = $"{nameof(NotificationModel.UserId)} eq '{userInfoService.GetUserId()}' " +
+                          $"and {nameof(NotificationModel.Deleted)} eq false " +
+                          $"and {nameof(NotificationModel.ApplicationName)} eq '{RabbitmqConstants.ApplicationName}'";
+
+        dispatcher.Dispatch(new GetDatagridItemsAction<NotificationModel>(loadArgs));
     }
 }

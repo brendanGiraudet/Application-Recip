@@ -4,7 +4,7 @@ namespace application_recip.Store.BaseStore;
 
 public class BaseState<T>
 {
-    public ODataEnumerable<T>? DatagridItems { get; }
+    public ODataEnumerable<T>? Items { get; }
 
     public int? TotalItems { get; }
 
@@ -12,7 +12,7 @@ public class BaseState<T>
 
     private BaseState() 
     {
-        DatagridItems = Enumerable.Empty<T>().AsODataEnumerable();
+        Items = Enumerable.Empty<T>().AsODataEnumerable();
         
         TotalItems = 0;
         
@@ -21,12 +21,12 @@ public class BaseState<T>
     
     public BaseState(
         BaseState<T>? currentState = null,
-        ODataEnumerable<T>? datagridItems = null,
+        ODataEnumerable<T>? items = null,
         int? totalItems = null,
         T? expectedItem = default
         ) 
     {
-        DatagridItems = datagridItems ?? currentState?.DatagridItems ?? Enumerable.Empty<T>().AsODataEnumerable();
+        Items = items ?? currentState?.Items ?? Enumerable.Empty<T>().AsODataEnumerable();
         
         TotalItems = totalItems ?? currentState?.TotalItems ?? 0;
         
