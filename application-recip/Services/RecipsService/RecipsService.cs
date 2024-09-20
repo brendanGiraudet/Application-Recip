@@ -26,6 +26,11 @@ public class RecipsService : BaseService<RecipModel>, IRecipsService
     }
 
     protected override string GetSuccessCreationItemMessages() => "Recip creation is in progress";
+    protected override string GetFailedCreationItemMessages() => "Error when create recip";
 
     protected override string GetSuccessUpdateItemMessages() => "Recip update is in progress";
+    protected override string GetFailedUpdateItemMessages() => "Error when update recip";
+
+    protected override string GetSuccessDeleteItemMessages() => "Recip deletion is in progress";
+    protected override string GetFailedDeleteItemMessages() => "Error when delete recip";
 }

@@ -111,8 +111,28 @@
             </RadzenStack>
         </RadzenColumn>
     </RadzenRow>
-    <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Center" Gap="1rem" class="rz-mt-8 rz-mb-4">
-        <RadzenButton ButtonType="ButtonType.Submit" Size="ButtonSize.Large" Icon="save" Text="Save" />
-        <RadzenButton ButtonStyle="ButtonStyle.Light" Variant="Variant.Flat" Size="ButtonSize.Large" Icon="cancel" Text="Cancel" Click="@Cancel" />
+    <RadzenStack Orientation="Orientation.Horizontal" 
+                 JustifyContent="JustifyContent.Center" 
+                 Gap="1rem" 
+                 class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" 
+                      Size="ButtonSize.Large" 
+                      Icon="@MaterialIconConstants.Save"
+                      Text="Save" />
+        
+        <RadzenButton ButtonStyle="ButtonStyle.Light" 
+                      Variant="Variant.Flat" 
+                      Size="ButtonSize.Large" 
+                      Icon="@MaterialIconConstants.Cancel"
+                      Text="Cancel" 
+                      Click="@Cancel" />
+
+        <RadzenButton ButtonStyle="ButtonStyle.Danger" 
+                      Variant="Variant.Flat" 
+                      Size="ButtonSize.Large" 
+                      Icon="@MaterialIconConstants.Delete"
+                      Text="Delete" 
+                      Click="@Delete"
+                      Visible="@(RecipId is not null)"/>
     </RadzenStack>
 </RadzenTemplateForm>

@@ -33,5 +33,5 @@ public interface IBaseService<T>
     /// Suppression d'un item
     /// </summary>
     /// <returns></returns>
-    Task<MethodResult<decimal>> DeleteAsync(decimal id);
+    Task<MethodResult<T>> DeleteAsync(T itemToDelete, string routingKey);
 }

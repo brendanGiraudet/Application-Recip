@@ -2,4 +2,10 @@
 
 public record DeleteItemAction<T>
 {
+    public T Item { get; }
+
+    public DeleteItemAction(T item)
+    {
+        Item = item;
+    }
 }

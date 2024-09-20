@@ -72,18 +72,18 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     [EffectMethod]
     public async Task HandleDeleteItemAction(DeleteItemAction<T> deleteItemAction, IDispatcher dispatcher)
     {
-        //var deleteItemResult = await _baseService.DeleteAsync(deleteItemAction.Id);
+        var deleteResult = await _baseService.DeleteAsync(deleteItemAction.Item, RabbitmqConstants.DeleteRecipRoutingKey);
 
-        //var messageType = MessageType.Error;
-        //var deletedItemId = deleteItemAction.Id;
+        var deletedItem = deleteItemAction.Item;
+        var messageType = MessageTypeEnum.Error;
 
-        //if (deleteItemResult.IsSuccess)
-        //{
-        //    messageType = MessageType.Success;
-        //    deletedItemId = deleteItemResult.Value;
-        //}
+        if (deleteResult.IsSuccess)
+        {
+            deletedItem = deleteResult.Value;
+            messageType = MessageTypeEnum.Success;
+        }
 
-        //dispatcher.Dispatch(new DeleteItemResultAction<T>(deletedItemId, deleteItemResult.IsSuccess));
-        //dispatcher.Dispatch(new SetMessageAction(deleteItemResult.Message, messageType));
+        dispatcher.Dispatch(new DeleteItemResultAction<T>(deletedItem, deleteResult.IsSuccess));
+        dispatcher.Dispatch(new SetMessageAction(deleteResult.Message ?? string.Empty, messageType));
     }
 }

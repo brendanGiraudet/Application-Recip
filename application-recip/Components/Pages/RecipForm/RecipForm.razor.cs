@@ -54,4 +54,9 @@ public partial class RecipForm
     {
         NavigationManager.NavigateTo(PageUrlsConstants.RecipsPath);
     }
+
+    void Delete()
+    {
+        Dispatcher.Dispatch(new DeleteItemAction<RecipModel>(RecipsState.Value.ExpectedItem));
+    }
 }

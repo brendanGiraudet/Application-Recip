@@ -23,4 +23,10 @@ public class RecipsEffect(IRecipsService recipsService,
     {
         if (action.IsSuccess) navigationManager.NavigateTo(PageUrlsConstants.RecipsPath);
     }
+    
+    [EffectMethod]
+    public virtual async Task HandleDeleteItemResultAction(DeleteItemResultAction<RecipModel> action, IDispatcher dispatcher)
+    {
+        if (action.IsSuccess) navigationManager.NavigateTo(PageUrlsConstants.RecipsPath);
+    }
 }

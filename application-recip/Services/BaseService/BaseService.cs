@@ -110,33 +110,32 @@ public class BaseService<T> : IBaseService<T> where T : class
     /// <inheritdoc/>
     public async Task<MethodResult<T>> CreateAsync(T itemToCreate, string routingKey)
     {
-        try
-        {
-            var message = new RabbitMqMessageBase<T>
-            {
-                ApplicationName = RabbitmqConstants.ApplicationName,
-                RoutingKey = routingKey,
-                Timestamp = DateTime.UtcNow,
-                UserId = _userInfoService.GetUserId(),
-                Payload = itemToCreate
-            };
-            _rabbitMqProducerService.PublishMessage(message, RabbitmqConstants.RecipExchangeName, routingKey);
-
-            return MethodResult<T>.CreateSuccessResult(itemToCreate, GetSuccessCreationItemMessages());
-        }
-        catch (System.Exception ex)
-        {
-            await Console.Out.WriteLineAsync(ex.Message);
-
-            return MethodResult<T>.CreateErrorResult("Create_Problem");
-        }
+        return await SendRabbitMqMessageAsync(itemToCreate, routingKey, GetSuccessCreationItemMessages(), GetFailedCreationItemMessages());
     }
 
     protected virtual string GetSuccessCreationItemMessages() => "Create_Success";
+    protected virtual string GetFailedCreationItemMessages() => "Create_Error";
 
     /// <inheritdoc/>
     public async Task<MethodResult<T>> UpdateAsync(T itemToUpdate, string routingKey)
     {
+        return await SendRabbitMqMessageAsync(itemToUpdate, routingKey, GetSuccessUpdateItemMessages(), GetFailedUpdateItemMessages());
+    }
+
+    protected virtual string GetSuccessUpdateItemMessages() => "Update_Success";
+    protected virtual string GetFailedUpdateItemMessages() => "Update_Error";
+
+    /// <inheritdoc/>
+    public async Task<MethodResult<T>> DeleteAsync(T itemToDelete, string routingKey)
+    {
+        return await SendRabbitMqMessageAsync(itemToDelete, routingKey, GetSuccessDeleteItemMessages(), GetFailedDeleteItemMessages());
+    }
+
+    protected virtual string GetSuccessDeleteItemMessages() => "Delete_Success";
+    protected virtual string GetFailedDeleteItemMessages() => "Delete_Error";
+
+    public async Task<MethodResult<T>> SendRabbitMqMessageAsync(T item, string routingKey, string successMessage, string failedMessage)
+    {
         try
         {
             var message = new RabbitMqMessageBase<T>
@@ -145,54 +144,17 @@ public class BaseService<T> : IBaseService<T> where T : class
                 RoutingKey = routingKey,
                 Timestamp = DateTime.UtcNow,
                 UserId = _userInfoService.GetUserId(),
-                Payload = itemToUpdate
+                Payload = item
             };
             _rabbitMqProducerService.PublishMessage(message, RabbitmqConstants.RecipExchangeName, routingKey);
 
-            return MethodResult<T>.CreateSuccessResult(itemToUpdate, GetSuccessUpdateItemMessages());
+            return MethodResult<T>.CreateSuccessResult(item, successMessage);
         }
         catch (System.Exception ex)
         {
             await Console.Out.WriteLineAsync(ex.Message);
 
-            return MethodResult<T>.CreateErrorResult("Update_Problem");
-        }
-    }
-
-    protected virtual string GetSuccessUpdateItemMessages() => "Update_Success";
-
-    /// <inheritdoc/>
-    public async Task<MethodResult<decimal>> DeleteAsync(decimal id)
-    {
-        try
-        {
-            var _keys = new Dictionary<string, object>
-            {
-                { _propertyKeyName, id }
-            };
-
-            var querySingle = new DataServiceQuerySingle<T>(_odataContainer, _dataServiceQuery.GetKeyPath(Serializer.GetKeyString(_odataContainer, _keys)));
-
-            var itemToDelete = querySingle.GetValue();
-
-            _odataContainer.Detach(itemToDelete);
-            _odataContainer.AttachTo(_entitySetName, itemToDelete);
-            _odataContainer.DeleteObject(itemToDelete);
-
-            var response = await _odataContainer.SaveChangesAsync();
-
-            if (response.First().StatusCode != StatusCodes.Status200OK)
-            {
-                return MethodResult<decimal>.CreateErrorResult("Delete_Problem");
-            }
-
-            return MethodResult<decimal>.CreateSuccessResult(id, "Delete_Success");
-        }
-        catch (System.Exception ex)
-        {
-            await Console.Out.WriteLineAsync(ex.Message);
-
-            return MethodResult<decimal>.CreateErrorResult("Delete_Problem");
+            return MethodResult<T>.CreateErrorResult(failedMessage);
         }
     }
 }
