@@ -3,10 +3,13 @@
 
 <RadzenButton ButtonStyle="ButtonStyle.Secondary"
               Click="OnClick">
-    <RadzenIcon Icon="@MaterialIconConstants.Notification" />
+    <RadzenIcon Icon="@GetNotificationIcon()" />
 
-    <RadzenBadge Variant="Variant.Outlined"
-                 BadgeStyle="BadgeStyle.Light"
-                 Text="@NotificationsState.Value.Items.Count().ToString()"
-                 class="rz-ms-2" />
+    @if (HaveNotifications())
+    {
+        <RadzenBadge Variant="Variant.Outlined"
+                     BadgeStyle="BadgeStyle.Light"
+                     Text="@NotificationsState.Value.Items.Count().ToString()"
+                     class="rz-ms-2" />
+    }
 </RadzenButton>

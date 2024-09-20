@@ -16,6 +16,8 @@ public partial class NotificationsButton
 
     [Inject] public NotificationsHostedService NotificationsHostedservice { get; set; }
 
+    private bool HaveNotifications() => NotificationsState.Value.Items.Count() > 0;
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
@@ -27,4 +29,6 @@ public partial class NotificationsButton
     {
         NavigationManager.NavigateTo(PageUrlsConstants.NotificationsPath);
     }
+
+    private string GetNotificationIcon() => HaveNotifications() ? MaterialIconConstants.ActiveNotification : MaterialIconConstants.Notification;
 }
