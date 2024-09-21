@@ -12,4 +12,8 @@ public static class PageUrlsConstants
     // INGREDIENT
     public const string IngredientsPath = "/ingredients";
     public static string GetIngredientFormPath(Guid? id = null) => id is null ? $"{IngredientsPath}/add" : $"{IngredientsPath}/{id}";
+
+    // CATEGORIES
+    public const string CategoriesPath = "/categories";
+    public static string GetCategoryFormPath(Guid? id = null) => id is null ? $"{CategoriesPath}/add" : $"{CategoriesPath}/{id}";
 }

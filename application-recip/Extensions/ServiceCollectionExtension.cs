@@ -1,4 +1,5 @@
 ﻿using application_recip.HostedServices.NotificationsHostedService;
+using application_recip.Services.CategoriesService;
 using application_recip.Services.ConfigurationService;
 using application_recip.Services.IngredientsService;
 using application_recip.Services.NotificationsService;
@@ -18,6 +19,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<IRecipsService, RecipsService>();
         services.AddTransient<INotificationsService, NotificationsService>();
         services.AddTransient<IIngredientsService, IngredientsService>();
+        services.AddTransient<ICategoriesService, CategoriesService>();
 
         services.AddScoped<NotificationsHostedService>();
 

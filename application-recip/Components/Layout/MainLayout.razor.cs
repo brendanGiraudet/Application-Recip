@@ -22,6 +22,8 @@ public partial class MainLayout
         menuItems = menuItems.Append(new MenuItem("Recips", MaterialIconConstants.Recips, PageUrlsConstants.RecipsPath));
         
         menuItems = menuItems.Append(new MenuItem("Ingredients", MaterialIconConstants.Ingredients, PageUrlsConstants.IngredientsPath));
+        
+        menuItems = menuItems.Append(new MenuItem("Categories", MaterialIconConstants.Categories, PageUrlsConstants.CategoriesPath));
     }
 }
 

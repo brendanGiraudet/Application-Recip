@@ -1,0 +1,44 @@
+﻿@page "/categories"
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>Categories</h3>
+
+<RadzenRow>
+    <RadzenButton Icon="@MaterialIconConstants.Add" Click="@(() => RedirectToCategoryFormPage())" />
+</RadzenRow>
+
+<br/>
+
+<RadzenRow JustifyContent="JustifyContent.Center">
+    <RadzenColumn Size="12" SizeMD="8">
+        <SearchTextbox LaunchSearchCallback="@SearchCategories" />
+    </RadzenColumn>
+</RadzenRow>
+
+@if (CategoriesState.Value.Items.Count() > 0)
+{
+    <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+        @foreach (var recip in CategoriesState.Value.Items.OrderBy(r => r.Name))
+        {
+            <RadzenCard class="rz-my-12 rz-mx-auto"
+                        Style="max-width: 420px"
+                        @onclick="@(() => RedirectToCategoryFormPage(recip.Id))">
+
+                <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+                    <RadzenRow>
+                        <RadzenText TextStyle="TextStyle.H6"
+                                    class="rz-color-on-primary-light">
+                            <strong>@recip.Name.ToUpper()</strong>
+                        </RadzenText>
+                    </RadzenRow>
+
+                </RadzenCard>
+            </RadzenCard>
+        }
+    </RadzenRow>
+}
+else
+{
+    <RadzenText Text="Pas de categories" />
+}
