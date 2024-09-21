@@ -1,0 +1,87 @@
+﻿@page "/ingredients/add"
+@page "/ingredients/{IngredientId:guid}"
+@using ms_recip.Ms_recip.Models
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>IngredientForm</h3>
+
+
+<RadzenTemplateForm Data="@IngredientsState.Value.ExpectedItem" Submit="@((IngredientModel args) => { Submit(args); })">
+    <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+        <RadzenColumn Size="12" SizeMD="6">
+            <RadzenStack>
+
+                @* IngredientName *@
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="IngredientName"
+                                     Component="IngredientName" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenColumn Size="12" SizeMD="12">
+
+                            <RadzenTextBox @bind-Value="@IngredientsState.Value.ExpectedItem.Name"
+                                           Placeholder="Enter the recip name"
+                                           Name="IngredientName" />
+                        </RadzenColumn>
+
+                        <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenRequiredValidator Component="IngredientName"
+                                                     Text="Ingredient name is required"
+                                                     Style="position: absolute" />
+                        </RadzenColumn>
+                    </RadzenColumn>
+                </RadzenRow>
+
+                @* IngredientImage *@
+                <RadzenRow AlignItems="AlignItems.Center">
+                    <RadzenColumn Size="12" SizeMD="4">
+                        <RadzenLabel Text="IngredientImage"
+                                     Component="IngredientImage" />
+                    </RadzenColumn>
+
+                    <RadzenColumn Size="12" SizeMD="8">
+                        <RadzenColumn Size="12" SizeMD="12">
+
+                            <RadzenTextBox @bind-Value="@IngredientsState.Value.ExpectedItem.Image"
+                                           Placeholder="Enter the url of the recip image"
+                                           Name="IngredientImage" />
+                        </RadzenColumn>
+
+                        <RadzenColumn Size="12" SizeMD="12">
+                            <RadzenRequiredValidator Component="IngredientImage"
+                                                     Text="Ingredient image is required"
+                                                     Style="position: absolute" />
+                        </RadzenColumn>
+                    </RadzenColumn>
+                </RadzenRow>
+
+            </RadzenStack>
+        </RadzenColumn>
+    </RadzenRow>
+    <RadzenStack Orientation="Orientation.Horizontal" 
+                 JustifyContent="JustifyContent.Center" 
+                 Gap="1rem" 
+                 class="rz-mt-8 rz-mb-4">
+        <RadzenButton ButtonType="ButtonType.Submit" 
+                      Size="ButtonSize.Large" 
+                      Icon="@MaterialIconConstants.Save"
+                      Text="Save" />
+        
+        <RadzenButton ButtonStyle="ButtonStyle.Light" 
+                      Variant="Variant.Flat" 
+                      Size="ButtonSize.Large" 
+                      Icon="@MaterialIconConstants.Cancel"
+                      Text="Cancel" 
+                      Click="@Cancel" />
+
+        <RadzenButton ButtonStyle="ButtonStyle.Danger" 
+                      Variant="Variant.Flat" 
+                      Size="ButtonSize.Large" 
+                      Icon="@MaterialIconConstants.Delete"
+                      Text="Delete" 
+                      Click="@Delete"
+                      Visible="@(IngredientId is not null)"/>
+    </RadzenStack>
+</RadzenTemplateForm>
