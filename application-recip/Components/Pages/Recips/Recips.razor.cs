@@ -18,7 +18,7 @@ public partial class Recips
     {
         var loadArgs = new LoadDataArgs();
 
-        loadArgs.Filter = $"contains({nameof(RecipModel.Name)}, '{searchTerm}')";
+        loadArgs.Filter = $"contains(tolower({nameof(RecipModel.Name)}), tolower('{searchTerm}'))";
 
         Dispatcher.Dispatch(new GetDatagridItemsAction<RecipModel>(loadArgs));
     }
