@@ -1,0 +1,50 @@
+﻿@page "/ingredients"
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>Ingredients</h3>
+
+<RadzenRow>
+    <RadzenButton Icon="@MaterialIconConstants.Add" Click="@(() => RedirectToIngredientFormPage())" />
+</RadzenRow>
+
+<br/>
+
+<RadzenRow JustifyContent="JustifyContent.Center">
+    <RadzenColumn Size="12" SizeMD="8">
+        <SearchTextbox LaunchSearchCallback="@SearchIngredients" />
+    </RadzenColumn>
+</RadzenRow>
+
+@if (IngredientsState.Value.Items.Count() > 0)
+{
+    <RadzenRow Gap="2rem" class="rz-p-0 rz-p-lg-4">
+        @foreach (var ingredient in IngredientsState.Value.Items.OrderBy(r => r.Name))
+        {
+            <RadzenCard class="rz-my-12 rz-mx-auto"
+                        Style="max-width: 420px"
+                        @onclick="@(() => RedirectToIngredientFormPage(ingredient.Id))">
+                <RadzenStack Orientation="Orientation.Horizontal"
+                             JustifyContent="JustifyContent.Center"
+                             Gap="1rem"
+                             class="rz-p-4">
+                    <RadzenImage Path="@ingredient.Image"
+                                 Style="width: 15rem; height: 15rem; border-radius: 50%;" />
+                </RadzenStack>
+
+                <RadzenCard class="rz-background-color-primary-light rz-shadow-0 rz-border-radius-0 rz-p-8" style="margin: 1rem calc(-1 * var(--rz-card-padding));">
+                    <RadzenRow>
+                        <RadzenText TextStyle="TextStyle.H6"
+                                    class="rz-color-on-primary-light">
+                            <strong>@ingredient.Name.ToUpper()</strong>
+                        </RadzenText>
+                    </RadzenRow>
+                </RadzenCard>
+            </RadzenCard>
+        }
+    </RadzenRow>
+}
+else
+{
+    <RadzenText Text="Pas de recette" />
+}

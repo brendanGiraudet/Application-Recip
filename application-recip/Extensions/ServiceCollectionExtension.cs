@@ -1,5 +1,6 @@
 ﻿using application_recip.HostedServices.NotificationsHostedService;
 using application_recip.Services.ConfigurationService;
+using application_recip.Services.IngredientsService;
 using application_recip.Services.NotificationsService;
 using application_recip.Services.RabbitMqProducerService;
 using application_recip.Services.RecipsService;
@@ -16,6 +17,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<IRabbitMqProducerService, RabbitMqProducerService>();
         services.AddTransient<IRecipsService, RecipsService>();
         services.AddTransient<INotificationsService, NotificationsService>();
+        services.AddTransient<IIngredientsService, IngredientsService>();
 
         services.AddScoped<NotificationsHostedService>();
 

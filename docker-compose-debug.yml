@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   application-recip:
-    image: bakayarusama/application-recip:1.0.12
+    image: bakayarusama/application-recip:1.0.13
     container_name: application-recip
     
     build:
@@ -15,7 +15,7 @@ services:
     
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ApplicationVersion: 1.0.12
+      ApplicationVersion: 1.0.13
 
       MSConfigurationSettings__OdataBaseUrl: "https://ms-configuration-local.brendan-giraudet.com/odata"
       
