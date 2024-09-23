@@ -1,6 +1,8 @@
 ﻿using application_recip.Constants;
+using application_recip.EqualityComparers;
 using application_recip.Services.UserInfoService;
 using application_recip.Store.BaseStore.Actions;
+using application_recip.Store.IngredientsStore;
 using application_recip.Store.RecipsStore;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
@@ -20,8 +22,6 @@ public partial class RecipForm
     
     [Parameter] public Guid? RecipId { get; set; }
 
-    private RecipModel _actualRecip = new();
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
@@ -36,18 +36,21 @@ public partial class RecipForm
         }
     }
 
+    private bool HaveChanges => !new RecipEqualityComparer().Equals(RecipsState.Value.ExpectedItem, RecipsState.Value.ActualItem);
+
     void Submit(RecipModel model)
     {
         if(RecipId is null)
         {
-            RecipsState.Value.ExpectedItem.Id = Guid.NewGuid();
+            model.Id = Guid.NewGuid();
 
-            RecipsState.Value.ExpectedItem.Authorname = UserInfoService.GetUserName();
-            RecipsState.Value.ExpectedItem.AuthorId = UserInfoService.GetUserId();
+            model.Authorname = UserInfoService.GetUserName();
+            
+            model.AuthorId = UserInfoService.GetUserId();
             
             Dispatcher.Dispatch(new CreateItemAction<RecipModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.CreateRecipRoutingKey));
         }
-        else
+        else if (HaveChanges)
         {
             Dispatcher.Dispatch(new UpdateItemAction<RecipModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.UpdateRecipRoutingKey));
         }

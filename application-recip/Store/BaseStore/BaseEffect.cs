@@ -1,5 +1,4 @@
-﻿using application_recip.Constants;
-using application_recip.Enums;
+﻿using application_recip.Enums;
 using application_recip.Services.BaseService;
 using application_recip.Store.BaseStore.Actions;
 using application_recip.Store.MessageStore.Actions;
@@ -15,7 +14,7 @@ public class BaseEffect<T>(IBaseService<T> _baseService) where T : class
     {
         var getItemsResult = await _baseService.GetDatagridItemsAsync(args: getItemsWithFilterAction.LoadDataArgs, expand: getItemsWithFilterAction.Expand, select: getItemsWithFilterAction.Select, count: getItemsWithFilterAction.Count);
 
-        if(getItemsResult.IsSuccess)
+        if (getItemsResult.IsSuccess)
         {
             var items = getItemsResult.Value.Value.AsODataEnumerable();
             var top = getItemsWithFilterAction.LoadDataArgs.Top ?? 10;

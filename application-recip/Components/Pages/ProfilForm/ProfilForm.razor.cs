@@ -1,4 +1,5 @@
 ﻿using application_recip.Constants;
+using application_recip.EqualityComparers;
 using application_recip.Services.UserInfoService;
 using application_recip.Store.BaseStore.Actions;
 using application_recip.Store.ProfilsStore;
@@ -15,18 +16,16 @@ public partial class ProfilForm
     [Inject] public required IDispatcher Dispatcher { get; set; }
 
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    
-    [Inject] public required IUserInfoService UserInfoService { get; set; }
-    
-    [Parameter] public Guid? ProfilId { get; set; }
 
-    private ProfilModel _actualProfil = new();
+    [Inject] public required IUserInfoService UserInfoService { get; set; }
+
+    [Parameter] public Guid? ProfilId { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        if(ProfilId is not null)
+        if (ProfilId is not null)
         {
             Dispatcher.Dispatch(new GetItemAction<ProfilModel>(ProfilId.Value));
         }
@@ -36,15 +35,17 @@ public partial class ProfilForm
         }
     }
 
+    private bool HaveChanges => !new ProfilEqualityComparer().Equals(ProfilsState.Value.ExpectedItem, ProfilsState.Value.ActualItem);
+
     void Submit(ProfilModel model)
     {
-        if(ProfilId is null)
+        if (ProfilId is null)
         {
-            ProfilsState.Value.ExpectedItem.Id = Guid.NewGuid();
-            
+            model.Id = Guid.NewGuid();
+
             Dispatcher.Dispatch(new CreateItemAction<ProfilModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.CreateProfilRoutingKey));
         }
-        else
+        else if (HaveChanges)
         {
             Dispatcher.Dispatch(new UpdateItemAction<ProfilModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.UpdateProfilRoutingKey));
         }

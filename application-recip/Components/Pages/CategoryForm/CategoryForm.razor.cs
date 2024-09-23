@@ -1,4 +1,5 @@
 ﻿using application_recip.Constants;
+using application_recip.EqualityComparers;
 using application_recip.Services.UserInfoService;
 using application_recip.Store.BaseStore.Actions;
 using application_recip.Store.CategoriesStore;
@@ -15,18 +16,16 @@ public partial class CategoryForm
     [Inject] public required IDispatcher Dispatcher { get; set; }
 
     [Inject] public required NavigationManager NavigationManager { get; set; }
-    
-    [Inject] public required IUserInfoService UserInfoService { get; set; }
-    
-    [Parameter] public Guid? CategoryId { get; set; }
 
-    private CategoryModel _actualCategory = new();
+    [Inject] public required IUserInfoService UserInfoService { get; set; }
+
+    [Parameter] public Guid? CategoryId { get; set; }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        if(CategoryId is not null)
+        if (CategoryId is not null)
         {
             Dispatcher.Dispatch(new GetItemAction<CategoryModel>(CategoryId.Value));
         }
@@ -36,15 +35,17 @@ public partial class CategoryForm
         }
     }
 
+    private bool HaveChanges => !new CategoryEqualityComparer().Equals(CategoriesState.Value.ExpectedItem, CategoriesState.Value.ActualItem);
+
     void Submit(CategoryModel model)
     {
-        if(CategoryId is null)
+        if (CategoryId is null)
         {
-            CategoriesState.Value.ExpectedItem.Id = Guid.NewGuid();
-            
+            model.Id = Guid.NewGuid();
+
             Dispatcher.Dispatch(new CreateItemAction<CategoryModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.CreateCategoryRoutingKey));
         }
-        else
+        else if (HaveChanges)
         {
             Dispatcher.Dispatch(new UpdateItemAction<CategoryModel>(model, RabbitmqConstants.RecipExchangeName, RabbitmqConstants.UpdateCategoryRoutingKey));
         }
