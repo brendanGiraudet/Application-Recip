@@ -7,6 +7,7 @@ public static class MaterialIconConstants
     public const string Recips = "menu_book";
     public const string Ingredients = "set_meal";
     public const string Categories = "category";
+    public const string Profils = "portrait";
     public const string Home = "home";
     public const string LeftArrow = "west";
     public const string Add = "add";

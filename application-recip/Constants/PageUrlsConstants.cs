@@ -16,4 +16,8 @@ public static class PageUrlsConstants
     // CATEGORIES
     public const string CategoriesPath = "/categories";
     public static string GetCategoryFormPath(Guid? id = null) => id is null ? $"{CategoriesPath}/add" : $"{CategoriesPath}/{id}";
+
+    // PROFIL
+    public const string ProfilsPath = "/profils";
+    public static string GetProfilFormPath(Guid? id = null) => id is null ? $"{ProfilsPath}/add" : $"{ProfilsPath}/{id}";
 }
