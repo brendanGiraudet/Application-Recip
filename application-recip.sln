@@ -5,7 +5,7 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "application-recip", "application-recip\application-recip.csproj", "{DFAB9A2E-BC4F-442D-B21A-205B4FDD0D41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "application-recip-tests", "application-recip-tests\application-recip-tests.csproj", "{A6F9A81E-BCDE-4E6F-A976-A7E991A989FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "application-recip-tests", "application-recip-tests\application-recip-tests.csproj", "{A6F9A81E-BCDE-4E6F-A976-A7E991A989FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

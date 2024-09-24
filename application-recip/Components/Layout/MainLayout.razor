@@ -1,58 +1,71 @@
 ﻿@inherits LayoutComponentBase
 
-<RadzenLayout style="position: relative;grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
-    <RadzenHeader>
-        <RadzenStack Orientation="Orientation.Horizontal" 
-                     AlignItems="AlignItems.Center" 
-                     Gap="0">
+<AuthorizeView>
+    <RadzenLayout style="position: relative;grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
+        <RadzenHeader>
+            <RadzenStack Orientation="Orientation.Horizontal"
+                         AlignItems="AlignItems.Center"
+                         Gap="0">
 
-            <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)" />
+                <RadzenSidebarToggle Click="@(() => SidebarExpanded = !SidebarExpanded)" />
 
-            <NotificationsButton />
-            
-            <RadzenAppearanceToggle />
-        </RadzenStack>
-    </RadzenHeader>
+                <NotificationsButton />
 
-    <RadzenSidebar Responsive="false" 
-                   @bind-Expanded="@SidebarExpanded" 
-                   style="position: absolute; z-index: 3">
-        <RadzenStack Orientation="Orientation.Horizontal" 
-                     class="rz-p-2"
-                     AlignItems="AlignItems.End"
-                     JustifyContent="JustifyContent.End">
-            <RadzenText Text="@ApplicationVersion" 
-                        TextStyle="TextStyle.Subtitle1"
-                        Style="color: var(--rz-secondary);margin:0;" />
+                <RadzenAppearanceToggle />
 
-            <RadzenButton Icon="@MaterialIconConstants.LeftArrow"
-                          Variant="Variant.Text" 
-                          ButtonStyle="ButtonStyle.Secondary" 
-                          Click="@(() => SidebarExpanded = false)" />
-        </RadzenStack>
+                <RadzenProfileMenu>
+                    <Template>
+                        <RadzenGravatar Email="email">
+                        </RadzenGravatar>
+                    </Template>
+                    <ChildContent>
+                        <RadzenProfileMenuItem Text="Deconnexion" Path="/signout-callback-oidc" Icon="account_circle"></RadzenProfileMenuItem>
+                    </ChildContent>
+                </RadzenProfileMenu>
 
-        <RadzenPanelMenu>
-            @foreach (var menuItem in menuItems)
-            {
-                <RadzenPanelMenuItem Text="@menuItem.Text"
-                                     Icon="@menuItem.Icon"
-                                     Path="@menuItem.Path"
-                                     Click="@(() => SidebarExpanded = false)" />
-            }
+            </RadzenStack>
+        </RadzenHeader>
 
-        </RadzenPanelMenu>
-    </RadzenSidebar>
-    
-    <RadzenBody>
-        <MessageDisplayer />
+        <RadzenSidebar Responsive="false"
+                       @bind-Expanded="@SidebarExpanded"
+                       style="position: absolute; z-index: 3">
+            <RadzenStack Orientation="Orientation.Horizontal"
+                         class="rz-p-2"
+                         AlignItems="AlignItems.End"
+                         JustifyContent="JustifyContent.End">
+                <RadzenText Text="@ApplicationVersion"
+                            TextStyle="TextStyle.Subtitle1"
+                            Style="color: var(--rz-secondary);margin:0;" />
 
-        <div class="rz-p-4">
-            @Body
-        </div>
-    </RadzenBody>
+                <RadzenButton Icon="@MaterialIconConstants.LeftArrow"
+                              Variant="Variant.Text"
+                              ButtonStyle="ButtonStyle.Secondary"
+                              Click="@(() => SidebarExpanded = false)" />
+            </RadzenStack>
 
-    @if (SidebarExpanded)
-    {
-        <div @onclick="@(() => SidebarExpanded = false)" class="rz-dialog-mask" style="position: absolute; z-index: 2"></div>
-    }
-</RadzenLayout>
+            <RadzenPanelMenu>
+                @foreach (var menuItem in menuItems)
+                {
+                    <RadzenPanelMenuItem Text="@menuItem.Text"
+                                         Icon="@menuItem.Icon"
+                                         Path="@menuItem.Path"
+                                         Click="@(() => SidebarExpanded = false)" />
+                }
+
+            </RadzenPanelMenu>
+        </RadzenSidebar>
+
+        <RadzenBody>
+            <MessageDisplayer />
+
+            <div class="rz-p-4">
+                @Body
+            </div>
+        </RadzenBody>
+
+        @if (SidebarExpanded)
+        {
+            <div @onclick="@(() => SidebarExpanded = false)" class="rz-dialog-mask" style="position: absolute; z-index: 2"></div>
+        }
+    </RadzenLayout>
+</AuthorizeView>

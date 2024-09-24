@@ -1,5 +1,7 @@
 ﻿@page "/"
 
+@using Microsoft.AspNetCore.Authentication
+
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
@@ -7,3 +9,13 @@
 Welcome to your new app.
 
 <RadzenText>Hello everybody</RadzenText>
+
+<AuthorizeView>
+<dl>
+    @foreach (var claim in context.User.Claims)
+    {
+        <dt>@claim.Type</dt>
+        <dt>@claim.Value</dt>
+    }
+</dl>
+</AuthorizeView>

@@ -10,6 +10,37 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+// Authentication duende
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = "Cookies";
+    options.DefaultChallengeScheme = "oidc";
+})
+    .AddCookie("Cookies")
+    .AddOpenIdConnect("oidc", options =>
+    {
+        options.Authority = builder.Configuration["DuendeLogin:Authority"];
+        options.ClientId = builder.Configuration["DuendeLogin:ClientId"];
+        options.ClientSecret = builder.Configuration["DuendeLogin:ClientSecret"];
+        options.ResponseType = "code";
+
+        var scopes = builder.Configuration["DuendeLogin:Scopes"].Split(',');
+
+        options.Scope.Clear();
+        foreach (var scope in scopes)
+        {
+            options.Scope.Add(scope);
+        }
+
+        options.GetClaimsFromUserInfoEndpoint = true;
+
+        options.MapInboundClaims = false;
+
+        options.DisableTelemetry = true;
+
+        options.SaveTokens = true;
+    });
+
 // Radzen
 builder.Services.AddRadzenComponents();
 
@@ -45,8 +76,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+    .AddInteractiveServerRenderMode()
+    .RequireAuthorization();
 
 app.UseRequestLocalization(options =>
 {
