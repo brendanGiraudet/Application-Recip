@@ -1,21 +1,37 @@
 ﻿@page "/"
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using Microsoft.AspNetCore.Authentication
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Hello @firstname @lastname</h1>
 
-Welcome to your new app.
+<span>Welcome to your new app.</span>
 
-<RadzenText>Hello everybody</RadzenText>
+@code
+{
+    private string firstname = "";
 
-<AuthorizeView>
-<dl>
-    @foreach (var claim in context.User.Claims)
+    private string lastname = "";
+
+    protected override async Task OnInitializedAsync()
     {
-        <dt>@claim.Type</dt>
-        <dt>@claim.Value</dt>
+        await base.OnInitializedAsync();
+
+        await GetClaimsPrincipalData();
     }
-</dl>
-</AuthorizeView>
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider
+            .GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            firstname = user.FindFirst(c => c.Type == "firstname")?.Value;
+            lastname = user.FindFirst(c => c.Type == "lastname")?.Value;
+        }
+    }
+}

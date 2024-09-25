@@ -2,6 +2,7 @@ using application_recip.Components;
 using application_recip.Extensions;
 using Fluxor;
 using Fluxor.Blazor.Web.ReduxDevTools;
+using Microsoft.AspNetCore.Authentication;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,11 +35,16 @@ builder.Services.AddAuthentication(options =>
 
         options.GetClaimsFromUserInfoEndpoint = true;
 
+        var claims = builder.Configuration["DuendeLogin:CustomClaims"].Split(',');
+
+        foreach (var claim in claims)
+        {
+            options.ClaimActions.MapUniqueJsonKey(claim.Trim(), claim.Trim());
+        }
+
         options.MapInboundClaims = false;
 
-        options.DisableTelemetry = true;
-
-        options.SaveTokens = true;
+        options.SaveTokens = false;
     });
 
 // Radzen
@@ -73,11 +79,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-app.UseAntiforgery();
-
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseStaticFiles();
+app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()

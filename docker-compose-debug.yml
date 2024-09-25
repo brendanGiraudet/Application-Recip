@@ -1,7 +1,7 @@
 version: "3.4"
 services:
   application-recip:
-    image: bakayarusama/application-recip:1.0.19
+    image: bakayarusama/application-recip:1.1.0
     container_name: application-recip
     
     build:
@@ -15,7 +15,7 @@ services:
     
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ApplicationVersion: 1.0.19
+      ApplicationVersion: 1.1.0
 
       MSConfigurationSettings__OdataBaseUrl: "https://ms-configuration-local.brendan-giraudet.com/odata"
       
@@ -26,5 +26,11 @@ services:
       RabbitMqQueueName: "application-recip"
       
       Notifications__PollingInterval: "10000"
+
+      DuendeLogin__Authority: "https://login-local.brendan-giraudet.com"
+      DuendeLogin__ClientId: "application-recip"
+      DuendeLogin__ClientSecret: "application-recip"
+      DuendeLogin__Scopes: "openid, profile, email"
+      DuendeLogin__CustomClaims: "firstname, lastname"
       
     restart: always
