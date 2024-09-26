@@ -35,6 +35,8 @@ public static class ServiceCollectionExtension
         services.Configure<MSRecipSettings>(options => configuration.GetSection(key: "MSRecipSettings").Bind(options));
 
         services.Configure<MSNotificationSettings>(options => configuration.GetSection(key: "MSNotificationSettings").Bind(options));
+        
+        services.Configure<DuendeLoginSettings>(options => configuration.GetSection(key: "DuendeLogin").Bind(options));
     }
 
     public static void AddCustomHostedServices(this IServiceCollection services)

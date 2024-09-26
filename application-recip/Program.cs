@@ -3,6 +3,8 @@ using application_recip.Extensions;
 using Fluxor;
 using Fluxor.Blazor.Web.ReduxDevTools;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,16 +16,21 @@ builder.Services.AddRazorComponents()
 // Authentication duende
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultScheme = "Cookies";
-    options.DefaultChallengeScheme = "oidc";
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 })
-    .AddCookie("Cookies")
-    .AddOpenIdConnect("oidc", options =>
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        //options.LogoutPath = builder.Configuration["DuendeLogin:LogoutPath"];
+    })
+    .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
     {
         options.Authority = builder.Configuration["DuendeLogin:Authority"];
         options.ClientId = builder.Configuration["DuendeLogin:ClientId"];
         options.ClientSecret = builder.Configuration["DuendeLogin:ClientSecret"];
         options.ResponseType = "code";
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.SignOutScheme = OpenIdConnectDefaults.AuthenticationScheme;
 
         var scopes = builder.Configuration["DuendeLogin:Scopes"].Split(',');
 
@@ -45,6 +52,9 @@ builder.Services.AddAuthentication(options =>
         options.MapInboundClaims = false;
 
         options.SaveTokens = false;
+
+        options.SignedOutCallbackPath = new PathString("/signout-callback-oidc");
+        options.SignedOutRedirectUri = "/";
     });
 
 // Radzen
@@ -60,6 +70,7 @@ builder.Services.AddFluxor(config =>
 
 builder.Services.AddLocalization();
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.AddConfigurations(builder.Configuration);

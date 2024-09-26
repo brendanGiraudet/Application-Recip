@@ -11,21 +11,19 @@
 
 @code
 {
-    private string firstname = "";
+    [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+    private string? firstname;
 
-    private string lastname = "";
+    private string? lastname;
 
     protected override async Task OnInitializedAsync()
     {
-        await base.OnInitializedAsync();
+        if (AuthState == null)
+        {
+            return;
+        }
 
-        await GetClaimsPrincipalData();
-    }
-
-    private async Task GetClaimsPrincipalData()
-    {
-        var authState = await AuthenticationStateProvider
-            .GetAuthenticationStateAsync();
+        var authState = await AuthState;
         var user = authState.User;
 
         if (user.Identity is not null && user.Identity.IsAuthenticated)
