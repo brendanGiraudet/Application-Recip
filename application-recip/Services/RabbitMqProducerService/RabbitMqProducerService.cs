@@ -1,5 +1,7 @@
-﻿using application_recip.Models;
+﻿using application_recip.Constants;
+using application_recip.Models;
 using application_recip.Services.ConfigurationService;
+using application_recip.Services.UserInfoService;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
@@ -11,7 +13,10 @@ public class RabbitMqProducerService : IRabbitMqProducerService, IDisposable
     private readonly IConnection _connection;
     private readonly IModel _channel;
 
-    public RabbitMqProducerService(IConfigurationService configurationService)
+    protected IUserInfoService _userInfoService;
+
+    public RabbitMqProducerService(IConfigurationService configurationService,
+                                   IUserInfoService userInfoService)
     {
         var rabbitMqConfigResult = configurationService.GetRabbitMqConfigAsync().Result;
 
@@ -27,6 +32,7 @@ public class RabbitMqProducerService : IRabbitMqProducerService, IDisposable
 
         _connection = factory.CreateConnection();
         _channel = _connection.CreateModel();
+        _userInfoService = userInfoService;
     }
 
     public void PublishMessage<T>(RabbitMqMessageBase<T> message, string exchangeName, string routingKey)
@@ -50,6 +56,31 @@ public class RabbitMqProducerService : IRabbitMqProducerService, IDisposable
         catch (Exception ex)
         {
             Console.WriteLine($"send message proglem : {ex.Message}");
+        }
+    }
+
+    public async Task<MethodResult<T>> SendRabbitMqMessageAsync<T>(T item, string exchangeName, string routingKey, string successMessage, string failedMessage)
+    {
+        try
+        {
+            var message = new RabbitMqMessageBase<T>
+            {
+                ApplicationName = RabbitmqConstants.ApplicationName,
+                RoutingKey = routingKey,
+                Timestamp = DateTime.UtcNow,
+                UserId = _userInfoService.GetUserId(),
+                Payload = item
+            };
+            
+            PublishMessage(message, exchangeName, routingKey);
+
+            return MethodResult<T>.CreateSuccessResult(item, successMessage);
+        }
+        catch (System.Exception ex)
+        {
+            await Console.Out.WriteLineAsync(ex.Message);
+
+            return MethodResult<T>.CreateErrorResult(failedMessage);
         }
     }
 
