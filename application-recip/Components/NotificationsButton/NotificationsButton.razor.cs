@@ -8,15 +8,15 @@ namespace application_recip.Components.NotificationsButton;
 
 public partial class NotificationsButton
 {
-    [Inject] public IState<NotificationsState> NotificationsState { get; set; }
+    [Inject] public required IState<NotificationsState> NotificationsState { get; set; }
 
-    [Inject] public IDispatcher Dispatcher { get; set; }
+    [Inject] public required IDispatcher Dispatcher { get; set; }
 
-    [Inject] public NavigationManager NavigationManager { get; set; }
+    [Inject] public required NavigationManager NavigationManager { get; set; }
 
-    [Inject] public NotificationsHostedService NotificationsHostedservice { get; set; }
+    [Inject] public required NotificationsHostedService NotificationsHostedservice { get; set; }
 
-    private bool HaveNotifications() => NotificationsState.Value.Items.Count() > 0;
+    private bool HaveNotifications() => NotificationsState.Value.Items?.Count() > 0;
 
     protected override async Task OnInitializedAsync()
     {

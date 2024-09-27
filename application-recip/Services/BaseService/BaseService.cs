@@ -1,27 +1,14 @@
 ﻿using application_recip.Constants;
 using application_recip.Models;
+using application_recip.Services.GetBaseService;
 using application_recip.Services.RabbitMqProducerService;
 using application_recip.Services.UserInfoService;
 using Microsoft.OData.Client;
-using Radzen;
-using System.Globalization;
 
 namespace application_recip.Services.BaseService;
 
-public class BaseService<T> : IBaseService<T> where T : class
+public class BaseService<T> : GetBaseService<T>, IBaseService<T> where T : class
 {
-    protected HttpClient _httpClient;
-
-    protected string _entitySetName;
-
-    protected string _propertyKeyName;
-
-    protected DataServiceContext _odataContainer;
-
-    protected string _odataUrl;
-
-    public required DataServiceQuery<T> _dataServiceQuery;
-
     protected IRabbitMqProducerService _rabbitMqProducerService;
     protected IUserInfoService _userInfoService;
 
@@ -33,79 +20,15 @@ public class BaseService<T> : IBaseService<T> where T : class
         IRabbitMqProducerService rabbitMqProducerService,
         IUserInfoService userInfoService,
         DataServiceContext odataContainer)
+        : base (httpClientFactory.CreateClient(),
+                entitySetName,
+                propertyKeyName,
+                odataContainer,
+                odataUrl)
     {
-        _entitySetName = entitySetName;
-
-        _propertyKeyName = propertyKeyName;
-
-        _httpClient = httpClientFactory.CreateClient();
-
-        _odataUrl = odataUrl;
-
         _rabbitMqProducerService = rabbitMqProducerService;
 
         _userInfoService = userInfoService;
-
-        _odataContainer = odataContainer;
-
-        _odataContainer.BuildingRequest += (sender, eventArgs) =>
-        {
-            Console.WriteLine(" " + eventArgs);
-            // Log request
-            Console.WriteLine($"Request: {eventArgs.RequestUri}");
-
-            if (eventArgs.Descriptor != null)
-            {
-                Console.WriteLine("Desc " + eventArgs.Descriptor);
-            }
-
-            eventArgs.Headers.Add("Accept-Language", CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
-        };
-    }
-
-    /// <inheritdoc/>
-    public virtual async Task<MethodResult<ODataServiceResult<T>>> GetDatagridItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null)
-    {
-        try
-        {
-            var url = $"{_odataUrl}/{_entitySetName}";
-            var uri = new Uri(url);
-            uri = uri.GetODataUri(filter: args.Filter, top: args.Top, skip: args.Skip, orderby: args.OrderBy, expand: expand, select: select, count: count);
-
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
-
-            var response = await _httpClient.SendAsync(httpRequestMessage);
-
-            var values = await response.ReadAsync<ODataServiceResult<T>>();
-
-            return MethodResult<ODataServiceResult<T>>.CreateSuccessResult(values);
-        }
-        catch (System.Exception ex)
-        {
-            return MethodResult<ODataServiceResult<T>>.CreateErrorResult(ex.Message);
-        }
-    }
-
-    /// <inheritdoc/>
-    public virtual async Task<MethodResult<T>> GetItemAsync(Guid id)
-    {
-        try
-        {
-            var _keys = new Dictionary<string, object>
-            {
-                { _propertyKeyName, id }
-            };
-
-            var querySingle = new DataServiceQuerySingle<T>(_odataContainer, _dataServiceQuery.GetKeyPath(Serializer.GetKeyString(_odataContainer, _keys)));
-
-            var selectedItem = await querySingle.GetValueAsync();
-
-            return MethodResult<T>.CreateSuccessResult(selectedItem);
-        }
-        catch (System.Exception ex)
-        {
-            return MethodResult<T>.CreateErrorResult(ex.Message);
-        }
     }
 
     /// <inheritdoc/>

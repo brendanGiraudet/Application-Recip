@@ -9,7 +9,7 @@ public interface IBaseService<T>
     /// Récupere la liste des items filtrés et paginé
     /// </summary>
     /// <returns></returns>
-    Task<MethodResult<ODataServiceResult<T>>> GetDatagridItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null);
+    Task<MethodResult<ODataServiceResult<T>>> GetItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null);
 
     /// <summary>
     /// Récupere un item
