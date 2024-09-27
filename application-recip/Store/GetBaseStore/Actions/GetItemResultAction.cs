@@ -1,4 +1,4 @@
-﻿namespace application_recip.Store.BaseStore.Actions;
+﻿namespace application_recip.Store.GetBaseStore.Actions;
 
 public record GetItemResultAction<T>
 {

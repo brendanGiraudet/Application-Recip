@@ -1,27 +1,13 @@
-﻿using application_recip.Helpers;
+﻿using application_recip.Store.BaseStore;
 using Radzen;
 
 namespace application_recip.Store.BaseStore;
 
-public class BaseState<T>
+public class BaseState<T> : GetBaseState<T>
 {
-    public ODataEnumerable<T>? Items { get; }
-
-    public int? TotalItems { get; }
-
-    public T? ExpectedItem { get; }
-
-    public T? ActualItem { get; }
-
     private BaseState()
     {
-        Items = Enumerable.Empty<T>().AsODataEnumerable();
-
-        TotalItems = 0;
-
-        ExpectedItem = Activator.CreateInstance<T>();
-
-        ActualItem = Activator.CreateInstance<T>();
+        
     }
 
     public BaseState(
@@ -30,13 +16,8 @@ public class BaseState<T>
         int? totalItems = null,
         T? expectedItem = default
         )
+        : base (currentState, items, totalItems, expectedItem)
     {
-        Items = items ?? currentState?.Items ?? Enumerable.Empty<T>().AsODataEnumerable();
-
-        TotalItems = totalItems ?? currentState?.TotalItems ?? 0;
-
-        ExpectedItem = expectedItem ?? (currentState != null ? currentState.ExpectedItem : Activator.CreateInstance<T>());
-
-        ActualItem = CloneHelper<T>.Clone(ExpectedItem);
+        
     }
 }

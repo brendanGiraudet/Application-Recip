@@ -1,5 +1,5 @@
 ﻿using application_recip.Constants;
-using application_recip.Store.BaseStore.Actions;
+using application_recip.Store.GetBaseStore.Actions;
 using application_recip.Store.IngredientsStore;
 using Fluxor;
 using Microsoft.AspNetCore.Components;

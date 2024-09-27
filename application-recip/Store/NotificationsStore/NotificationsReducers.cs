@@ -1,4 +1,4 @@
-﻿using application_recip.Store.BaseStore.Actions;
+﻿using application_recip.Store.GetBaseStore.Actions;
 using Fluxor;
 using ms_notification.Ms_notification.Models;
 

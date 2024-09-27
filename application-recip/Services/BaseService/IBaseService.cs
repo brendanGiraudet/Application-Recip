@@ -1,22 +1,11 @@
 ﻿using application_recip.Models;
+using application_recip.Services.GetBaseService;
 using Radzen;
 
 namespace application_recip.Services.BaseService;
 
-public interface IBaseService<T>
+public interface IBaseService<T> : IGetBaseService<T>
 {
-    /// <summary>
-    /// Récupere la liste des items filtrés et paginé
-    /// </summary>
-    /// <returns></returns>
-    Task<MethodResult<ODataServiceResult<T>>> GetItemsAsync(LoadDataArgs args, string? expand = null, string? select = null, bool? count = null);
-
-    /// <summary>
-    /// Récupere un item
-    /// </summary>
-    /// <returns></returns>
-    Task<MethodResult<T>> GetItemAsync(Guid id);
-
     /// <summary>
     /// Créer un item
     /// </summary>
