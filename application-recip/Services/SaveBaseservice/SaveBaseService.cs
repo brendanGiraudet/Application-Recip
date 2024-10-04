@@ -12,11 +12,11 @@ public class SaveBaseService<T> : GetBaseService<T>, ISaveBaseService<T>
     public SaveBaseService(
         string entitySetName,
         string propertyKeyName,
-        IHttpClientFactory httpClientFactory,
+        HttpClient httpClient,
         string odataUrl,
         DataServiceContext odataContainer,
         IRabbitMqProducerService rabbitMqProducerService)
-        : base(httpClientFactory.CreateClient(),
+        : base(httpClient,
                 entitySetName,
                 propertyKeyName,
                 odataContainer,

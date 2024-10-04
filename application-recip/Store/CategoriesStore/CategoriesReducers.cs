@@ -10,7 +10,7 @@ public static class CategoriesReducers
 {
     #region GetDatagridItemsResultAction
     [ReducerMethod]
-    public static CategoriesState ReduceGetDatagridItemsResultAction(CategoriesState state, GetDatagridItemsResultAction<CategoryModel> action) => new CategoriesState(currentState: state, datagridItems: action.Items);
+    public static CategoriesState ReduceGetDatagridItemsResultAction(CategoriesState state, GetItemsResultAction<CategoryModel> action) => new CategoriesState(currentState: state, datagridItems: action.Items);
 
     #endregion
 

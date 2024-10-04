@@ -8,7 +8,7 @@ public static class NotificationsReducers
 {
     #region GetDatagridItemsResultAction
     [ReducerMethod]
-    public static NotificationsState ReduceGetDatagridItemsResultAction(NotificationsState state, GetDatagridItemsResultAction<NotificationModel> action) => new NotificationsState(currentState: state, datagridItems: action.Items);
+    public static NotificationsState ReduceGetDatagridItemsResultAction(NotificationsState state, GetItemsResultAction<NotificationModel> action) => new NotificationsState(currentState: state, datagridItems: action.Items);
 
     #endregion
 }

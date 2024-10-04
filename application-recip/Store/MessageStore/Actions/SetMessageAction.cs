@@ -2,15 +2,7 @@
 
 namespace application_recip.Store.MessageStore.Actions;
 
-public class SetMessageAction
+public record SetMessageAction(string Message, MessageTypeEnum MessageType)
 {
-    public string Message { get; }
-
-    public MessageTypeEnum MessageType { get; }
-
-    public SetMessageAction(string message, MessageTypeEnum messageType)
-    {
-        Message = message;
-        MessageType = messageType;
-    }
+    
 }

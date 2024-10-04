@@ -24,6 +24,6 @@ public class NotificationsEffect(
                           $"and {nameof(NotificationModel.Deleted)} eq false " +
                           $"and {nameof(NotificationModel.ApplicationName)} eq '{RabbitmqConstants.ApplicationName}'";
 
-        dispatcher.Dispatch(new GetDatagridItemsAction<NotificationModel>(loadArgs));
+        dispatcher.Dispatch(new GetItemsAction<NotificationModel>(loadArgs));
     }
 }

@@ -20,14 +20,14 @@ public partial class Recips
 
         loadArgs.Filter = $"contains(tolower({nameof(RecipModel.Name)}), tolower('{searchTerm}'))";
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<RecipModel>(loadArgs));
+        Dispatcher.Dispatch(new GetItemsAction<RecipModel>(loadArgs));
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<RecipModel>(new()));
+        Dispatcher.Dispatch(new GetItemsAction<RecipModel>(new()));
     }
 
     private void RedirectToRecipFormPage(Guid? id = null) => NavigationManager.NavigateTo(PageUrlsConstants.GetRecipFormPath(id));

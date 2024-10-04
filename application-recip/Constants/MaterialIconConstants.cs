@@ -16,4 +16,5 @@ public static class MaterialIconConstants
     public const string Delete = "delete";
     public const string People = "people";
     public const string Timer = "timer";
+    public const string Remove = "clear";
 }

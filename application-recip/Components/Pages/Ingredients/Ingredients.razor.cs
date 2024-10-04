@@ -20,14 +20,14 @@ public partial class Ingredients
 
         loadArgs.Filter = $"contains(tolower({nameof(IngredientModel.Name)}), tolower('{searchTerm}'))";
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<IngredientModel>(loadArgs));
+        Dispatcher.Dispatch(new GetItemsAction<IngredientModel>(loadArgs));
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<IngredientModel>(new()));
+        Dispatcher.Dispatch(new GetItemsAction<IngredientModel>(new()));
     }
 
     private void RedirectToIngredientFormPage(Guid? id = null) => NavigationManager.NavigateTo(PageUrlsConstants.GetIngredientFormPath(id));

@@ -5,6 +5,7 @@ using application_recip.Services.IngredientsService;
 using application_recip.Services.NotificationsService;
 using application_recip.Services.ProfilsService;
 using application_recip.Services.RabbitMqProducerService;
+using application_recip.Services.RecipCategoriesService;
 using application_recip.Services.RecipsService;
 using application_recip.Services.UserInfoService;
 using application_recip.Settings;
@@ -22,6 +23,7 @@ public static class ServiceCollectionExtension
         services.AddTransient<IIngredientsService, IngredientsService>();
         services.AddTransient<ICategoriesService, CategoriesService>();
         services.AddTransient<IProfilsService, ProfilsService>();
+        services.AddTransient<IRecipCategoriesService, RecipCategoriesService>();
 
         services.AddScoped<NotificationsHostedService>();
 

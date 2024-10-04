@@ -10,7 +10,7 @@ public static class IngredientsReducers
 {
     #region GetDatagridItemsResultAction
     [ReducerMethod]
-    public static IngredientsState ReduceGetDatagridItemsResultAction(IngredientsState state, GetDatagridItemsResultAction<IngredientModel> action) => new IngredientsState(currentState: state, datagridItems: action.Items);
+    public static IngredientsState ReduceGetDatagridItemsResultAction(IngredientsState state, GetItemsResultAction<IngredientModel> action) => new IngredientsState(currentState: state, datagridItems: action.Items);
 
     #endregion
 

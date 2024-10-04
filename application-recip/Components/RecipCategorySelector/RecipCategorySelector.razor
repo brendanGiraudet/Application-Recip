@@ -1,0 +1,27 @@
+﻿@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<RadzenStack>
+    <RadzenRow>
+        <h3>Categories</h3>
+    </RadzenRow>
+
+    <RadzenRow>
+        <RadzenDropDown Data="@Categories"
+                        ValueChanged="OnCategorySelect"
+                        TValue="CategoryModel"
+                        TextProperty="@nameof(CategoryModel.Name)"
+                        AllowFiltering="true"
+                        AllowClear="true"
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" />
+    </RadzenRow>
+    <RadzenRow>
+        @foreach(var category in SelectedCategories)
+        {
+            <RadzenButton Icon="@MaterialIconConstants.Remove" 
+                          Text="@category.Name"
+                          Click="@(() => OnCategoryRemove(category))"
+                          Variant="Variant.Outlined"
+                          ButtonStyle="ButtonStyle.Primary" />
+        }
+    </RadzenRow>  
+</RadzenStack>

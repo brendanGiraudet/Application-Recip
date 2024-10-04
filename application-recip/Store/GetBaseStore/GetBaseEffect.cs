@@ -10,7 +10,7 @@ namespace application_recip.Store.BaseStore;
 public class GetBaseEffect<T>(IGetBaseService<T> _baseService)
 {
     [EffectMethod]
-    public virtual async Task HandleGetItemsAction(GetDatagridItemsAction<T> getItemsWithFilterAction, IDispatcher dispatcher)
+    public virtual async Task HandleGetItemsAction(GetItemsAction<T> getItemsWithFilterAction, IDispatcher dispatcher)
     {
         var getItemsResult = await _baseService.GetItemsAsync(args: getItemsWithFilterAction.LoadDataArgs, expand: getItemsWithFilterAction.Expand, select: getItemsWithFilterAction.Select, count: getItemsWithFilterAction.Count);
 
@@ -20,7 +20,7 @@ public class GetBaseEffect<T>(IGetBaseService<T> _baseService)
             var top = getItemsWithFilterAction.LoadDataArgs.Top ?? 10;
             var count = getItemsResult.Value?.Count ?? 0;
 
-            dispatcher.Dispatch(new GetDatagridItemsResultAction<T>(items, count, top));
+            dispatcher.Dispatch(new GetItemsResultAction<T>(items, count, top));
         }
     }
 

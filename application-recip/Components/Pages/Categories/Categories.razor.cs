@@ -20,14 +20,14 @@ public partial class Categories
 
         loadArgs.Filter = $"contains(tolower({nameof(CategoryModel.Name)}), tolower('{searchTerm}'))";
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<CategoryModel>(loadArgs));
+        Dispatcher.Dispatch(new GetItemsAction<CategoryModel>(loadArgs));
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<CategoryModel>(new()));
+        Dispatcher.Dispatch(new GetItemsAction<CategoryModel>(new()));
     }
 
     private void RedirectToCategoryFormPage(Guid? id = null) => NavigationManager.NavigateTo(PageUrlsConstants.GetCategoryFormPath(id));

@@ -8,12 +8,16 @@ using Fluxor;
 using Microsoft.AspNetCore.Components;
 using ms_recip.Ms_recip.Models;
 using application_recip.Store.GetBaseStore.Actions;
+using application_recip.Store.RecipCategoriesStore;
+using Radzen;
 
 namespace application_recip.Components.Pages.RecipForm;
 
 public partial class RecipForm
 {
     [Inject] public required IState<RecipsState> RecipsState { get; set; }
+
+    [Inject] public required IState<RecipCategoriesState> RecipCategoriesState { get; set; }    
 
     [Inject] public required IDispatcher Dispatcher { get; set; }
 
@@ -30,6 +34,11 @@ public partial class RecipForm
         if(RecipId is not null)
         {
             Dispatcher.Dispatch(new GetItemAction<RecipModel>(RecipId.Value));
+
+            var loadArgs = new LoadDataArgs();
+            loadArgs.Filter = $"{nameof(RecipCategoryModel.RecipId)} eq {RecipId}";
+
+            Dispatcher.Dispatch(new GetItemsAction<RecipCategoryModel>(loadArgs));
         }
         else
         {

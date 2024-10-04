@@ -10,7 +10,7 @@ public static class ProfilsReducers
 {
     #region GetDatagridItemsResultAction
     [ReducerMethod]
-    public static ProfilsState ReduceGetDatagridItemsResultAction(ProfilsState state, GetDatagridItemsResultAction<ProfilModel> action) => new ProfilsState(currentState: state, datagridItems: action.Items);
+    public static ProfilsState ReduceGetDatagridItemsResultAction(ProfilsState state, GetItemsResultAction<ProfilModel> action) => new ProfilsState(currentState: state, datagridItems: action.Items);
 
     #endregion
 

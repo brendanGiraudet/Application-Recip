@@ -20,14 +20,14 @@ public partial class Profils
 
         loadArgs.Filter = $"contains(tolower({nameof(ProfilModel.Name)}), tolower('{searchTerm}'))";
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<ProfilModel>(loadArgs));
+        Dispatcher.Dispatch(new GetItemsAction<ProfilModel>(loadArgs));
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
 
-        Dispatcher.Dispatch(new GetDatagridItemsAction<ProfilModel>(new()));
+        Dispatcher.Dispatch(new GetItemsAction<ProfilModel>(new()));
     }
 
     private void RedirectToProfilFormPage(Guid? id = null) => NavigationManager.NavigateTo(PageUrlsConstants.GetProfilFormPath(id));

@@ -2,7 +2,7 @@
 
 namespace application_recip.Store.GetBaseStore.Actions;
 
-public record GetDatagridItemsResultAction<T>
+public record GetItemsResultAction<T>
 {
     public ODataEnumerable<T> Items { get; }
 
@@ -10,7 +10,7 @@ public record GetDatagridItemsResultAction<T>
 
     public int Take { get; }
 
-    public GetDatagridItemsResultAction(ODataEnumerable<T> items, int count, int take)
+    public GetItemsResultAction(ODataEnumerable<T> items, int count, int take)
     {
         Items = items;
         Count = count;
