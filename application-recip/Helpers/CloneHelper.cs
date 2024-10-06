@@ -2,7 +2,7 @@
 
 public static class CloneHelper<T>
 {
-    public static T? Clone(T? instance)
+    public static T CloneItem(T instance)
     {
         T? clone = default;
 
@@ -22,5 +22,20 @@ public static class CloneHelper<T>
         }
 
         return clone;
+    }
+
+    public static IEnumerable<T> CloneEnumerable(IEnumerable<T>? instance)
+    {
+        IEnumerable<T> clonedItems = [];
+
+        if (instance != null)
+        {
+            foreach (var item in instance)
+            {
+                clonedItems = clonedItems.Append(CloneItem(item));
+            }
+        }
+
+        return clonedItems;
     }
 }

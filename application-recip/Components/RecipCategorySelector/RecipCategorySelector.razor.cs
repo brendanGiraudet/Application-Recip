@@ -36,9 +36,9 @@ public partial class RecipCategorySelector
         Dispatcher.Dispatch(new GetItemsAction<CategoryModel>());
     }
 
-    IEnumerable<CategoryModel> Categories => CategoriesState.Value.Items?.Where(c => !RecipCategoriesState.Value.ItemsToSave.Any(s => s.CategoryId == c.Id)) ?? [];
+    IEnumerable<CategoryModel> Categories => CategoriesState.Value.Items?.Where(c => !RecipCategoriesState.Value.ExpectedItemsToSave.Any(s => s.CategoryId == c.Id)) ?? [];
 
-    IEnumerable<CategoryModel> SelectedCategories => CategoriesState.Value.Items?.Where(c => RecipCategoriesState.Value.ItemsToSave.Any(s => s.CategoryId == c.Id)) ?? [];
+    IEnumerable<CategoryModel> SelectedCategories => CategoriesState.Value.Items?.Where(c => RecipCategoriesState.Value.ExpectedItemsToSave.Any(s => s.CategoryId == c.Id)) ?? [];
 
     private void OnCategorySelect(CategoryModel? selectedCategoryModel)
     {
@@ -55,7 +55,7 @@ public partial class RecipCategorySelector
 
     private void OnCategoryRemove(CategoryModel removedCAtegoryModel)
     {
-        var recipCategory = RecipCategoriesState.Value.ItemsToSave.FirstOrDefault(s => s.CategoryId == removedCAtegoryModel.Id);
+        var recipCategory = RecipCategoriesState.Value.ExpectedItemsToSave.FirstOrDefault(s => s.CategoryId == removedCAtegoryModel.Id);
 
         if(recipCategory is not null)
             Dispatcher.Dispatch(new RemoveItemToSaveAction<RecipCategoryModel>(recipCategory));

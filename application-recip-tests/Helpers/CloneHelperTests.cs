@@ -17,7 +17,7 @@ public class CloneHelperTests
         };
 
         // Act
-        var expectedIngredient = CloneHelper<IngredientModel>.Clone(currentIngredient);
+        var expectedIngredient = CloneHelper<IngredientModel>.CloneItem(currentIngredient);
 
         // Assert
         Assert.Equal(expectedIngredient.Id, currentIngredient.Id);

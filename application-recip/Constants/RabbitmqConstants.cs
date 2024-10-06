@@ -10,9 +10,7 @@ public static class RabbitmqConstants
 
     // RECIP ROUTING KEY
     public const string CreateRecipRoutingKey = "CreateRecip";
-    
     public const string UpdateRecipRoutingKey = "UpdateRecip";
-    
     public const string DeleteRecipRoutingKey = "DeleteRecip";
     
     // NOTIFICATION ROUTING KEY
@@ -20,22 +18,19 @@ public static class RabbitmqConstants
 
     // INGREDIENT ROUTING KEY
     public const string CreateIngredientRoutingKey = "CreateIngredient";
-
     public const string UpdateIngredientRoutingKey = "UpdateIngredient";
-
     public const string DeleteIngredientRoutingKey = "DeleteIngredient";
     
     // CATEGORY ROUTING KEY
     public const string CreateCategoryRoutingKey = "CreateCategory";
-
     public const string UpdateCategoryRoutingKey = "UpdateCategory";
-
     public const string DeleteCategoryRoutingKey = "DeleteCategory";
 
     // PROFIL ROUTING KEY
     public const string CreateProfilRoutingKey = "CreateProfil";
-
     public const string UpdateProfilRoutingKey = "UpdateProfil";
-
     public const string DeleteProfilRoutingKey = "DeleteProfil";
+
+    // RECIP CATEGORY ROUTING KEY
+    public const string SaveRecipCategoryRoutingKey = "SaveRecipCategory";
 }

@@ -2,7 +2,6 @@
 using application_recip.EqualityComparers;
 using application_recip.Services.UserInfoService;
 using application_recip.Store.BaseStore.Actions;
-using application_recip.Store.IngredientsStore;
 using application_recip.Store.RecipsStore;
 using Fluxor;
 using Microsoft.AspNetCore.Components;
@@ -46,7 +45,8 @@ public partial class RecipForm
         }
     }
 
-    private bool HaveChanges => !new RecipEqualityComparer().Equals(RecipsState.Value.ExpectedItem, RecipsState.Value.ActualItem);
+    private bool HaveChanges => !new RecipEqualityComparer().Equals(RecipsState.Value.ExpectedItem, RecipsState.Value.ActualItem)
+    || !RecipCategoriesState.Value.ActualItemsToSave.SequenceEqual(RecipCategoriesState.Value.ExpectedItemsToSave, new RecipCategoryEqualityComparer());
 
     void Submit(RecipModel model)
     {

@@ -35,6 +35,6 @@ public class GetBaseState<T>
 
         ExpectedItem = expectedItem ?? (currentState != null ? currentState.ExpectedItem : Activator.CreateInstance<T>());
 
-        ActualItem = CloneHelper<T>.Clone(ExpectedItem);
+        ActualItem = CloneHelper<T>.CloneItem(ExpectedItem);
     }
 }

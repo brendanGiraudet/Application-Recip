@@ -18,9 +18,10 @@ public class RecipCategoriesState : SaveBaseState<RecipCategoryModel>
         ODataEnumerable<RecipCategoryModel>? items = null,
         int? totalItems = null,
         RecipCategoryModel? expectedItem = default,
-        IEnumerable<RecipCategoryModel>? itemsToSave = null
+        IEnumerable<RecipCategoryModel>? itemsToSave = null,
+        IEnumerable<RecipCategoryModel>? actualItemsToSave = null
         )
-        : base (currentState, items, totalItems, expectedItem, itemsToSave)
+        : base (currentState, items, totalItems, expectedItem, itemsToSave, actualItemsToSave)
     {
         
     }
